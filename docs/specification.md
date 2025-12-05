@@ -1,6 +1,6 @@
 # TaskMark Format Specification
 
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Format:** Markdown (.md)
 **Encoding:** UTF-8 (REQUIRED)
 **Line Endings:** LF (`\n`) or CRLF (`\r\n`)

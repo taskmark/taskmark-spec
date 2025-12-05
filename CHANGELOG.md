@@ -1,3 +1,5 @@
+# [1.2.0](https://github.com/taskmark/taskmark-spec/compare/v1.1.0...v1.2.0) (2025-12-05)
+
 # [1.1.0](https://github.com/taskmark/taskmark-spec/releases/tag/v1.1.0) (2025-12-05)
 
 - Add v1.1.0 frontmatter enhancements and modular spec structure

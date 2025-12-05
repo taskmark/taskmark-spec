@@ -131,7 +131,7 @@ taskmark-spec/
 | Type | Pattern | Example | Notes |
 |------|---------|---------|-------|
 | Assignee | `@username` | `@alice @bob` | Case-insensitive, `a-zA-Z0-9_-` |
-| Project | `+name[/sub]` | `+Acme/Backend` | Hierarchical with `/` |
+| Project | `+name[/sub]` | `+Acme/Backend`, `+app/v1.2.3` | Hierarchical `/`, versions with `.` |
 | Tag | `#tag` | `#critical #backend` | Case-insensitive |
 | Due date | `due:DATETIME` | `due:2024-03-15T18:00` | ISO 8601 format |
 | Estimate | `~NUM[hmd]` | `~2h`, `~30m`, `~3d` | Hours, minutes, days |
@@ -169,11 +169,11 @@ taskmark-spec/
 ### Section Headers and Inheritance
 
 ```markdown
-# TODO +GlobalProject #globalTag type:value
+# TODO +GlobalProject #globalTag @team type:value
 
-## Section Name +SectionProject #sectionTag
+## Section Name +SectionProject #sectionTag @alice
 
-- [ ] Task +TaskProject #taskTag
+- [ ] Task +TaskProject #taskTag @bob
 ```
 
 **Inheritance Rules:**
@@ -182,19 +182,20 @@ taskmark-spec/
 |---------------|----------|---------|
 | Projects (`+`) | Hierarchical join with `/` | `+A` + `+B` + `+C` = `+A/B/C` |
 | Tags (`#`) | Additive (all tags included) | `#api` + `#urgent` = both |
+| Assignees (`@`) | Additive (all assignees included) | `@alice` + `@bob` = both |
 | Key-value | Child overrides parent | Child `type:bug` overrides parent `type:feature` |
 
 **Example:**
 
 ```markdown
-# TODO +Acme #work
+# TODO +Acme #work @team
 
-## Backend +API #critical
+## Backend +API #critical @alice
 
-- [ ] Task +Database
+- [ ] Task +Database @bob
 ```
 
-**Task inherits:** `+Acme/API/Database`, `#work`, `#critical`
+**Task inherits:** `+Acme/API/Database`, `#work`, `#critical`, `@team`, `@alice`, `@bob`
 
 ### Subtasks
 
@@ -206,6 +207,7 @@ taskmark-spec/
 - Independent state from parent
 - Projects hierarchical join
 - Tags additive
+- Assignees additive
 
 ```markdown
 - [ ] (A) Parent task @alice +Database #critical ~8h
@@ -567,21 +569,21 @@ taskmark-spec/
 ### Section with Inheritance
 
 ```markdown
-# TODO +global-project #global-tag
+# TODO +global-project #global-tag @team
 
-## Section Name +section-project #section-tag
+## Section Name +section-project #section-tag @alice
 
-- [ ] Task inherits: +global-project/section-project, #global-tag, #section-tag
+- [ ] Task inherits: +global-project/section-project, #global-tag, #section-tag, @team, @alice
 ```
 
 ### File Link with Inheritance
 
 ```markdown
-## Backend +Acme #critical
+## Backend +Acme #critical @alice
 
 [API Team](team/api.md)
 
-# All tasks in api.md inherit: +Acme, #critical
+# All tasks in api.md inherit: +Acme, #critical, @alice
 ```
 
 ---

@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(pre-commit run:*)"
-    ],
-    "deny": [],
-    "ask": []
-  }
-}

@@ -4,7 +4,7 @@ AI-authored documentation for AI agents working on the TaskMark project.
 
 **Format:** AISD-inspired
 **Audience:** Claude Code, Cursor, and other AI coding assistants
-**Last Updated:** 2025-11-19
+**Last Updated:** 2025-12-05
 
 ---
 
@@ -22,6 +22,7 @@ Follow conventional commits pattern with type prefixes:
 | `chore:` | Maintenance tasks | `chore: update dependencies` |
 
 **Commit Message Structure:**
+
 ```
 <type>: <description in imperative mood>
 
@@ -34,11 +35,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 **Examples from AISD reference:**
+
 - `docs: map checkout architecture and rate limiting baseline`
 - `docs: plan checkout rate limiting (20 req/min)`
 - `feat: add checkout rate limiting (20 req/min)`
 
 **Key Rules:**
+
 - Use lowercase for type prefix
 - Imperative mood: "add" not "added"
 - Concise description (50 chars preferred, 72 max)
@@ -53,6 +56,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 **Core Purpose:** Plain-text task management format that works everywhere
 
 **Key Characteristics:**
+
 - Markdown-based (`.md` files)
 - Git-friendly version control
 - Metadata inheritance through sections
@@ -78,15 +82,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 taskmark-spec/
 ├── README.md                          # User-facing introduction
-├── agents.md                          # THIS FILE - AI agent guide
+├── AGENTS.md                          # THIS FILE - AI agent guide
 ├── LICENSE                            # MIT license
 ├── docs/
 │   ├── specification.md               # Complete technical spec
 │   └── format-comparison.md           # Comparison with todo.txt, xit, etc.
 └── examples/
-    ├── simple-daily-ops.md            # Basic task tracking
-    ├── medium-mission.md              # Priorities + estimates
-    └── complex-starbase-ops.md        # Full lifecycle + timezones
+    ├── sprint-planning.md             # Sprint with subtasks
+    ├── team-standup.md                # Team coordination
+    └── comprehensive.md               # Full feature showcase
 ```
 
 ---
@@ -126,10 +130,10 @@ taskmark-spec/
 
 | Type | Pattern | Example | Notes |
 |------|---------|---------|-------|
-| Assignee | `@username` | `@geordi @data` | Case-insensitive, `a-zA-Z0-9_-` |
-| Project | `+name[/sub]` | `+Enterprise/WarpCore` | Hierarchical with `/` |
-| Tag | `#tag` | `#critical #engineering` | Case-insensitive |
-| Due date | `due:DATETIME` | `due:2366-03-15T18:00` | ISO 8601 format |
+| Assignee | `@username` | `@alice @bob` | Case-insensitive, `a-zA-Z0-9_-` |
+| Project | `+name[/sub]` | `+Acme/Backend` | Hierarchical with `/` |
+| Tag | `#tag` | `#critical #backend` | Case-insensitive |
+| Due date | `due:DATETIME` | `due:2024-03-15T18:00` | ISO 8601 format |
 | Estimate | `~NUM[hmd]` | `~2h`, `~30m`, `~3d` | Hours, minutes, days |
 | Recurrence | `repeat:PATTERN` | `repeat:weekdays`, `repeat:"every monday"` | Uses recurrent library |
 | Custom metadata | `key:value` or `key:"value"` | `type:bug ticket:ENG-4701` | Keys case-insensitive |
@@ -137,10 +141,11 @@ taskmark-spec/
 ### Date Formats
 
 **Accepted:**
-- Date only: `2366-03-10` (uses YAML front matter timezone or local)
-- Date + time: `2366-03-10T09:00`
-- Date + time + seconds: `2366-03-10T09:00:00`
-- Date + time + timezone: `2366-03-10T09:00-05:00` (explicit timezone)
+
+- Date only: `2024-03-10` (uses YAML front matter timezone or local)
+- Date + time: `2024-03-10T09:00`
+- Date + time + seconds: `2024-03-10T09:00:00`
+- Date + time + timezone: `2024-03-10T09:00-05:00` (explicit timezone)
 
 **Invalid Date Handling:** Warn at `file:line`, ignore field, continue parsing
 
@@ -163,19 +168,21 @@ taskmark-spec/
 | Key-value | Child overrides parent | Child `type:bug` overrides parent `type:feature` |
 
 **Example:**
+
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Engineering +Engineering #critical
+## Backend +API #critical
 
-- [ ] Task +WarpCore
+- [ ] Task +Database
 ```
 
-**Task inherits:** `+Enterprise/Engineering/WarpCore`, `#starfleet`, `#critical`
+**Task inherits:** `+Acme/API/Database`, `#work`, `#critical`
 
 ### Subtasks
 
 **Rules:**
+
 - One level only (no sub-subtasks)
 - Any indentation > 0 (spaces or tabs)
 - Inherits ALL parent metadata + section metadata
@@ -184,10 +191,10 @@ taskmark-spec/
 - Tags additive
 
 ```markdown
-- [ ] (A) Parent task @geordi +WarpCore #critical ~8h
-  - [ ] (B) Replace constrictors @geordi ~2h
-  - [ ] (B) Calibrate injectors @barclay ~3h
-  - [x] (C) Test at warp 5 @geordi ~3h
+- [ ] (A) Parent task @alice +Database #critical ~8h
+  - [ ] (B) Update connection pooling @alice ~2h
+  - [ ] (B) Add retry logic @bob ~3h
+  - [x] (C) Write migration @alice ~3h
 ```
 
 ### File Links
@@ -197,15 +204,15 @@ taskmark-spec/
 **Inheritance:** All tasks in linked file inherit section metadata where link appears
 
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Engineering +Engineering #critical
+## Backend +Backend #critical
 
-[Warp Core Team](engineering/warp-core.md)
-[Transporter Team](engineering/transporters.md)
+[API Team](backend/api.md)
+[Database Team](backend/database.md)
 ```
 
-**Result:** All tasks in both files inherit `+Enterprise/Engineering`, `#starfleet`, `#critical`
+**Result:** All tasks in both files inherit `+Acme/Backend`, `#work`, `#critical`
 
 ---
 
@@ -214,11 +221,13 @@ taskmark-spec/
 ### When Task Marked `[x]` with `repeat:`
 
 **Old Task Changes:**
+
 1. State → `[x]`
 2. Add done date (2nd position after planned date)
 3. Remove `repeat:` field
 
 **New Task Created:**
+
 1. State → `[ ]`
 2. Dates updated to next occurrence
 3. Keep `repeat:` field
@@ -235,6 +244,7 @@ taskmark-spec/
 | 5 | Apply offset to new dates | pendulum |
 
 **Offset Preservation:**
+
 ```markdown
 # Original
 - [ ] Task planned:2024-03-10 due:2024-03-14 repeat:weekly
@@ -267,12 +277,13 @@ taskmark-spec/
 | `ticket` | Issue tracker ID | `ticket:ENG-4739` |
 | `sprint` | Sprint number/name | `sprint:24` |
 | `milestone` | Release version | `milestone:v2.0` |
-| `url` | Full URL | `url:https://starfleet.fed/tickets/4701` |
+| `url` | Full URL | `url:https://jira.example.com/ENG-4701` |
 | `status` | Status name | `status:in-progress` |
 
 ### File Organization Strategies
 
 **Single File (Small Projects):**
+
 ```markdown
 # TODO +Project
 
@@ -282,6 +293,7 @@ taskmark-spec/
 ```
 
 **Multi-File (Large Projects):**
+
 ```markdown
 # Main: project-todo.md
 # TODO +Project #tag
@@ -327,19 +339,22 @@ taskmark-spec/
 ### When Writing Documentation
 
 **Tone:**
+
 - Clear, concise, scannable
 - Tables over prose when possible
 - Explicit constraints (not vague)
 - Use MUST/REQUIRED/SHOULD/MAY from RFC 2119
 
 **Examples:**
-- Always use Star Trek TNG scenarios for consistency
+
+- Use realistic software project scenarios
 - Show minimal → full-featured progression
 - Include "after inheritance" results
 
 ### When Writing Examples
 
 **Required Elements:**
+
 1. YAML front matter with locale/timezone (if using times)
 2. Top-level `# TODO` header
 3. Section headers for organization
@@ -354,24 +369,27 @@ taskmark-spec/
 ### Pitfall: Forgetting Inheritance
 
 **Problem:**
-```markdown
-# TODO +Enterprise
 
-## Engineering
-- [ ] Task +Enterprise   # WRONG: Redundant project
+```markdown
+# TODO +Acme
+
+## Backend
+- [ ] Task +Acme   # WRONG: Redundant project
 ```
 
 **Solution:**
-```markdown
-# TODO +Enterprise
 
-## Engineering +Engineering
-- [ ] Task   # Inherits +Enterprise/Engineering
+```markdown
+# TODO +Acme
+
+## Backend +Backend
+- [ ] Task   # Inherits +Acme/Backend
 ```
 
 ### Pitfall: Deep Subtask Nesting
 
 **Problem:**
+
 ```markdown
 - [ ] Task
   - [ ] Subtask
@@ -379,6 +397,7 @@ taskmark-spec/
 ```
 
 **Solution:**
+
 ```markdown
 - [ ] Task
   - [ ] Subtask 1
@@ -390,11 +409,13 @@ taskmark-spec/
 ### Pitfall: Inline File Links
 
 **Problem:**
+
 ```markdown
 - [ ] Check [tasks](team.md) for details   # Link ignored
 ```
 
 **Solution:**
+
 ```markdown
 ## Section
 
@@ -406,24 +427,28 @@ taskmark-spec/
 ### Pitfall: Ambiguous Dates
 
 **Problem:**
+
 ```markdown
 - [ ] Task due:03-10   # Ambiguous format
 ```
 
 **Solution:**
+
 ```markdown
-- [ ] Task due:2366-03-10   # ISO 8601 required
+- [ ] Task due:2024-03-10   # ISO 8601 required
 ```
 
 ### Pitfall: Missing Quotes in Values
 
 **Problem:**
+
 ```markdown
 - [ ] Task notes:This is a long note   # Stops at first space
 # Parsed as: notes:This
 ```
 
 **Solution:**
+
 ```markdown
 - [ ] Task notes:"This is a long note"
 ```
@@ -450,7 +475,7 @@ taskmark-spec/
 ### When Asked About Format
 
 1. **Cite Spec:** Reference [specification.md](docs/specification.md)
-2. **Show Examples:** Use Star Trek TNG scenarios
+2. **Show Examples:** Use realistic project scenarios
 3. **Explain Trade-offs:** Compare with todo.txt, xit, etc.
 4. **Link Comparison:** Reference [format-comparison.md](docs/format-comparison.md)
 
@@ -472,7 +497,7 @@ taskmark-spec/
 - [ ] Task
 
 # Full featured
-- [ ] (A) 2366-03-10T09:00-05:00 Task @user +proj/sub #tag1 #tag2 due:2366-03-15 repeat:weekdays ~2h type:bug
+- [ ] (A) 2024-03-10T09:00-05:00 Task @user +proj/sub #tag1 #tag2 due:2024-03-15 repeat:weekdays ~2h type:bug
 
 # Subtasks with inheritance
 ## Section +Proj #tag
@@ -510,17 +535,20 @@ taskmark-spec/
 ## Quick Reference
 
 ### Minimal Task
+
 ```markdown
 - [ ] Task description
 ```
 
 ### Everything
+
 ```markdown
-- [ ] (A) 2366-03-10T09:00-05:00 Task @user +project/sub #tag created:2366-03-01T10:00 started:2366-03-10T09:00 due:2366-03-15T18:00 repeat:weekdays ~2h type:bug ticket:ENG-4739
+- [ ] (A) 2024-03-10T09:00-05:00 Task @user +project/sub #tag created:2024-03-01T10:00 started:2024-03-10T09:00 due:2024-03-15T18:00 repeat:weekdays ~2h type:bug ticket:ENG-4739
   - [ ] Subtask
 ```
 
 ### Section with Inheritance
+
 ```markdown
 # TODO +global-project #global-tag
 
@@ -530,12 +558,13 @@ taskmark-spec/
 ```
 
 ### File Link with Inheritance
+
 ```markdown
-## Engineering +Enterprise #critical
+## Backend +Acme #critical
 
-[Warp Core](team/warp-core.md)
+[API Team](team/api.md)
 
-# All tasks in warp-core.md inherit: +Enterprise, #critical
+# All tasks in api.md inherit: +Acme, #critical
 ```
 
 ---
@@ -547,9 +576,9 @@ taskmark-spec/
 | [README.md](README.md) | User introduction | Explaining format to humans |
 | [specification.md](docs/specification.md) | Complete technical spec | Implementation questions |
 | [format-comparison.md](docs/format-comparison.md) | Format comparison | Understanding design decisions |
-| [simple-daily-ops.md](examples/simple-daily-ops.md) | Basic example | Learning basics |
-| [medium-mission.md](examples/medium-mission.md) | Intermediate example | Priorities + estimates |
-| [complex-starbase-ops.md](examples/complex-starbase-ops.md) | Advanced example | Full lifecycle + timezones |
+| [sprint-planning.md](examples/sprint-planning.md) | Sprint example | Learning basics |
+| [team-standup.md](examples/team-standup.md) | Team coordination | Intermediate example |
+| [comprehensive.md](examples/comprehensive.md) | Full feature showcase | Advanced usage |
 
 ---
 
@@ -579,18 +608,16 @@ This document follows AISD (AI Small Docs) principles:
 ### Working with This Project
 
 **When in doubt:**
+
 1. Read the spec: [specification.md](docs/specification.md)
 2. Check examples: [examples/](examples/)
 3. Compare formats: [format-comparison.md](docs/format-comparison.md)
 4. Ask questions: Clarify before implementing
 
 **Core values:**
+
 - Plain text simplicity
 - Git-native workflow
 - Human readability
 - Machine parseability
 - Future-proof format
-
----
-
-**Make it so.** 🖖

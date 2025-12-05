@@ -1,5 +1,8 @@
 # TaskMark
 
+[![CI](https://github.com/taskmark/taskmark-spec/actions/workflows/ci.yml/badge.svg)](https://github.com/taskmark/taskmark-spec/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 **Plain-text todos that work everywhere.** Write tasks in Markdown, track them in git, and never lose your todos again.
 
 **Status:** Draft v1.0.0
@@ -25,9 +28,9 @@ Your todos should be as simple as your code:
 ```markdown
 # TODO
 
-- [ ] Inspect warp nacelles @geordi
-- [x] 2366-03-10 2366-03-10 Calibrate sensor array @data
-- [ ] Crew physicals @crusher due:2366-03-15
+- [ ] Review pull request @alice
+- [x] 2024-03-10 2024-03-10 Update dependencies @bob
+- [ ] Write tests @charlie due:2024-03-15
 ```
 
 That's it. You're done. Everything else is optional.
@@ -35,32 +38,33 @@ That's it. You're done. Everything else is optional.
 ### Add Some Structure
 
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Engineering Operations +Engineering #critical
+## Backend +Backend #critical
 
-- [ ] (A) 2366-03-10 Repair warp drive @geordi due:2366-03-15 ~8h
-  - [ ] Replace magnetic constrictors ~2h
-  - [ ] Recalibrate plasma injectors ~3h
-  - [x] 2366-03-09 2366-03-10 Test at warp 5 ~3h
+- [ ] (A) 2024-03-10 Fix database connection @alice due:2024-03-15 ~8h
+  - [ ] Update connection pooling ~2h
+  - [ ] Add retry logic ~3h
+  - [x] 2024-03-09 2024-03-10 Write migration ~3h
 
-- [ ] 2366-03-15T09:00 Daily standup @geordi repeat:weekdays ~15m
+- [ ] 2024-03-15T09:00 Daily standup @team repeat:weekdays ~15m
 
-## Medical Operations +Medical #routine
+## Frontend +Frontend #routine
 
-- [ ] Complete crew physicals @crusher due:2366-03-20 ~10h
-- [ ] Weekly medical staff meeting @crusher repeat:weekly ~1h
+- [ ] Complete UI redesign @bob due:2024-03-20 ~10h
+- [ ] Weekly design review @team repeat:weekly ~1h
 ```
 
 **What's happening here?**
-- `# TODO +Enterprise #starfleet` = Top-level metadata (all tasks inherit this!)
+
+- `# TODO +Acme #work` = Top-level metadata (all tasks inherit this!)
 - `(A)` = Priority
-- `2366-03-10` = Planned start date
-- `2366-03-10 2366-03-10` = Planned and done dates
-- `@geordi` = Assigned to Geordi
-- `+Engineering` = Section project (combines with `+Enterprise`)
-- `#critical` = Section tag (adds to `#starfleet`)
-- `due:2366-03-15` = Deadline
+- `2024-03-10` = Planned start date
+- `2024-03-10 2024-03-10` = Planned and done dates
+- `@alice` = Assigned to Alice
+- `+Backend` = Section project (combines with `+Acme`)
+- `#critical` = Section tag (adds to `#work`)
+- `due:2024-03-15` = Deadline
 - `~8h` = Time estimate
 - `repeat:weekdays` = Recurring task
 - Indented = Subtasks
@@ -70,15 +74,15 @@ That's it. You're done. Everything else is optional.
 Put metadata on ANY section (even the top one!), and all tasks inherit it:
 
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Warp Core Maintenance +WarpCore #critical
+## Database Maintenance +Database #critical
 
-- [ ] Inspect dilithium chamber @barclay
-- [ ] Run diagnostics @geordi
+- [ ] Optimize indexes @alice
+- [ ] Run vacuum @bob
 ```
 
-Both tasks automatically get: `+Enterprise/WarpCore`, `#starfleet`, and `#critical`
+Both tasks automatically get: `+Acme/Database`, `#work`, and `#critical`
 
 **Every task in the file inherits from `# TODO`!**
 
@@ -90,17 +94,17 @@ Both tasks automatically get: `+Enterprise/WarpCore`, `#starfleet`, and `#critic
 
 | Symbol | Meaning | Example |
 |--------|---------|---------|
-| `[ ]` | Open task | `- [ ] Fix warp drive` |
-| `[x]` | Done | `- [x] Calibrate sensors` |
-| `[-]` | Cancelled | `- [-] Abandon old protocol` |
-| `[!]` | Blocked | `- [!] Awaiting Starfleet approval` |
+| `[ ]` | Open task | `- [ ] Fix login bug` |
+| `[x]` | Done | `- [x] Update docs` |
+| `[-]` | Cancelled | `- [-] Deprecated feature` |
+| `[!]` | Blocked | `- [!] Awaiting API access` |
 
 ### Priorities
 
 ```markdown
-- [ ] (A) Emergency warp core repair
+- [ ] (A) Critical security fix
 - [ ] (B) Routine maintenance
-- [ ] (C) Optional upgrades
+- [ ] (C) Nice to have
 ```
 
 Use any value: `(A)`, `(1)`, `(urgent)`, `(P1)` - whatever makes sense to you.
@@ -109,15 +113,15 @@ Use any value: `(A)`, `(1)`, `(urgent)`, `(P1)` - whatever makes sense to you.
 
 ```markdown
 # Simple dates
-- [ ] 2366-03-10 Start mission
-- [x] 2366-03-08 2366-03-10 Complete report
+- [ ] 2024-03-10 Start project
+- [x] 2024-03-08 2024-03-10 Complete report
 
 # With times
-- [ ] 2366-03-15T09:00 Morning briefing due:2366-03-15T09:30
+- [ ] 2024-03-15T09:00 Morning standup due:2024-03-15T09:30
 
 # With timezones
-- [ ] 2366-03-15T09:00-05:00 Team call (EST)
-- [ ] 2366-03-15T15:00+01:00 European meeting
+- [ ] 2024-03-15T09:00-05:00 Team call (EST)
+- [ ] 2024-03-15T15:00+01:00 European meeting
 ```
 
 ### Recurring Tasks
@@ -133,60 +137,50 @@ When you mark a recurring task done, it automatically creates the next one.
 ### Subtasks
 
 ```markdown
-- [ ] Launch away mission @riker
-  - [ ] Brief away team
-  - [ ] Check transporter
-  - [x] Pack emergency supplies
+- [ ] Launch new feature @alice
+  - [ ] Write documentation
+  - [ ] Create tests
+  - [x] Design mockups
 ```
 
 One level only. Keep it simple.
 
 ### Multiple Files
 
-**Main: enterprise-todo.md**
+**Main: project-todo.md**
+
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Engineering +Engineering #critical
+## Backend +Backend #critical
 
-[Warp Core Team](engineering/warp-core.md)
-[Transporter Team](engineering/transporters.md)
+[API Team](backend/api.md)
+[Database Team](backend/database.md)
 
-## Medical +Medical #routine
+## Frontend +Frontend #routine
 
-[Medical Staff](medical/staff-tasks.md)
+[UI Team](frontend/ui-tasks.md)
 ```
 
-**Linked: engineering/warp-core.md**
-```markdown
-# Warp Core Maintenance
+**Linked: backend/api.md**
 
-- [ ] Inspect dilithium chamber @barclay
-- [ ] Calibrate antimatter flow @geordi
+```markdown
+# API Tasks
+
+- [ ] Add rate limiting @alice
+- [ ] Update authentication @bob
 ```
 
-All warp core tasks automatically get: `+Enterprise/Engineering`, `#starfleet`, `#critical`
+All API tasks automatically get: `+Acme/Backend`, `#work`, `#critical`
 
 ### Custom Metadata
 
 Add whatever you need:
 
 ```markdown
-- [ ] Fix bug type:urgent ticket:ENG-4701 url:https://starfleet.fed/tickets/4701
+- [ ] Fix bug type:urgent ticket:ENG-4701 url:https://jira.example.com/ENG-4701
 - [ ] Research task notes:"Check latest specs" priority:high
 ```
-
----
-
-## Real Examples
-
-Check out the [examples directory](examples/) for complete todo files:
-
-- **[Simple Daily Operations](examples/simple-daily-ops.md)** - Basic task tracking
-- **[Medium Mission Planning](examples/medium-mission.md)** - With priorities and estimates
-- **[Complex Starbase Operations](examples/complex-starbase-ops.md)** - Full lifecycle tracking with timezones
-
-All examples use Star Trek TNG scenarios because everything's better with Star Trek.
 
 ---
 
@@ -216,17 +210,20 @@ Start with basic checkboxes. Add structure as your project grows. Use metadata i
 ## Quick Reference
 
 ### Basic Task
+
 ```markdown
 - [ ] Task description
 ```
 
 ### Everything
+
 ```markdown
-- [ ] (A) 2366-03-10 Task @user +project #tag due:2366-03-15 ~2h type:bug
+- [ ] (A) 2024-03-10 Task @user +project #tag due:2024-03-15 ~2h type:bug
   - [ ] Subtask
 ```
 
 ### Section with Inheritance
+
 ```markdown
 # TODO +project #tag type:value
 
@@ -236,11 +233,13 @@ Start with basic checkboxes. Add structure as your project grows. Use metadata i
 ```
 
 ### Recurring
+
 ```markdown
-- [ ] Task repeat:weekdays due:2366-03-15
+- [ ] Task repeat:weekdays due:2024-03-15
 ```
 
 ### States
+
 - `[ ]` = Open
 - `[x]` = Done
 - `[-]` = Cancelled
@@ -269,16 +268,43 @@ This is a format specification. We welcome:
 - Example files
 - Bug reports and suggestions
 
+### Development Setup
+
+```bash
+# Install pre-commit hooks (requires Python)
+pip install pre-commit
+pre-commit install --hook-type pre-commit --hook-type commit-msg
+
+# Run checks manually
+pre-commit run --all-files
+```
+
+### Commit Convention
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) for semantic versioning:
+
+```bash
+feat: add new feature        # → minor version bump (0.1.0 → 0.2.0)
+fix: fix a bug               # → patch version bump (0.1.0 → 0.1.1)
+docs: update documentation   # → patch version bump
+chore: maintenance task      # → no release
+
+# Breaking changes
+feat!: breaking change       # → major version bump (0.1.0 → 1.0.0)
+```
+
 ---
 
 ## Credits
 
 Inspired by the best parts of:
+
 - [todo.txt](https://github.com/todotxt/todo.txt) - The OG plain-text format
 - [todo.md](https://github.com/todomd/todo.md) - Markdown task lists
 - [xit](https://github.com/jotaen/xit) - Minimalist text format
 
 Specification format influenced by:
+
 - [AISD](https://github.com/rickgemignani/AISD) - AI Small Docs
 - [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) - Requirement levels
 
@@ -289,7 +315,3 @@ Specification format influenced by:
 MIT License - see [LICENSE](LICENSE) file for details.
 
 **TL;DR:** Use it however you want. Build tools, sell products, fork it, whatever. No strings attached.
-
----
-
-**Make it so.** 🖖

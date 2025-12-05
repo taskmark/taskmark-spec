@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v14
+        with:
+          globs: "**/*.md"
+
+      - name: Check spelling
+        uses: streetsidesoftware/cspell-action@v5
+        with:
+          files: "**/*.md"
+          config: "./cspell.json"
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress --exclude-mail './**/*.md'
+          fail: true
+
+      - name: AISD forbidden words check
+        run: |
+          echo "Checking for forbidden words (should/might/could/typically/usually/often)..."
+          # Exclude README.md, CHANGELOG.md, and AGENTS.md from this check
+          if find . -name "*.md" ! -name "README.md" ! -name "CHANGELOG.md" ! -name "AGENTS.md" -exec grep -l -E "\b(should|might|could|typically|usually|often)\b" {} \; | grep -q .; then
+            echo "❌ Found forbidden words in the following files:"
+            find . -name "*.md" ! -name "README.md" ! -name "CHANGELOG.md" ! -name "AGENTS.md" -exec grep -Hn -E "\b(should|might|could|typically|usually|often)\b" {} \;
+            echo ""
+            echo "Use MUST/REQUIRED/FORBIDDEN instead per AISD style guide."
+            exit 1
+          fi
+          echo "✅ No forbidden words found"
+
+      - name: AISD line count check
+        run: |
+          echo "Checking docs/ files for line count (max 600)..."
+          failed=0
+          for file in docs/*.md docs/**/*.md; do
+            [ -f "$file" ] || continue
+            lines=$(wc -l < "$file")
+            if [ "$lines" -gt 600 ]; then
+              echo "❌ $file has $lines lines (max 600)"
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            echo "Consider splitting large files."
+            exit 1
+          fi
+          echo "✅ All docs files within line limit"
+
+  commitlint:
+    name: Commit Messages
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install commitlint
+        run: npm install -g @commitlint/cli @commitlint/config-conventional
+
+      - name: Validate PR commits
+        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose

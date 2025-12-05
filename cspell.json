@@ -1,0 +1,43 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "taskmark",
+    "frontmatter",
+    "subtasks",
+    "assignee",
+    "assignees",
+    "subheadings",
+    "YYYY",
+    "backlog",
+    "todos",
+    "unchecked",
+    "datetimes",
+    "parseable",
+    "parseability",
+    "AISD",
+    "RRULE",
+    "DTSTART",
+    "BYDAY",
+    "dateutil",
+    "rrule",
+    "dateparser",
+    "todotxt",
+    "todomd",
+    "jotaen",
+    "matthewpalmer",
+    "Janik",
+    "Rotz",
+    "standups"
+  ],
+  "ignorePaths": [
+    ".git/**",
+    "node_modules/**",
+    ".github/**"
+  ],
+  "ignoreRegExpList": [
+    "\\(#\\d+\\)",
+    "@\\w+",
+    "\\+\\w+"
+  ]
+}

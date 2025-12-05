@@ -103,47 +103,52 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 
 ## Example: Same Task Set Across Formats
 
-**Scenario:** Warp drive repair with 3 subtasks, assigned to Geordi, high priority, due 2366-03-15
+**Scenario:** Database fix with 3 subtasks, assigned to Alice, high priority, due 2024-03-15
 
 ### todo.txt
+
 ```
-(A) 2366-03-01 Repair warp drive containment field +Enterprise @engineering due:2366-03-15 est:8h
-(B) 2366-03-01 Replace magnetic constrictors +Enterprise @engineering due:2366-03-12 est:2h parent:warp-drive-repair
-(B) 2366-03-01 Recalibrate plasma injectors +Enterprise @engineering due:2366-03-13 est:3h parent:warp-drive-repair
-(B) 2366-03-01 Test at warp 5 +Enterprise @engineering due:2366-03-14 est:3h parent:warp-drive-repair
+(A) 2024-03-01 Fix database connection pooling +Acme @backend due:2024-03-15 est:8h
+(B) 2024-03-01 Update connection settings +Acme @backend due:2024-03-12 est:2h parent:db-fix
+(B) 2024-03-01 Add retry logic +Acme @backend due:2024-03-13 est:3h parent:db-fix
+(B) 2024-03-01 Write migration tests +Acme @backend due:2024-03-14 est:3h parent:db-fix
 ```
 
 ### todo.md (original)
-```markdown
-## Engineering
 
-- [ ] Repair warp drive containment field @geordi #critical due:2366-03-15 ~8h
-  - [ ] Replace magnetic constrictors ~2h
-  - [ ] Recalibrate plasma injectors ~3h
-  - [ ] Test at warp 5 ~3h
+```markdown
+## Backend
+
+- [ ] Fix database connection pooling @alice #critical due:2024-03-15 ~8h
+  - [ ] Update connection settings ~2h
+  - [ ] Add retry logic ~3h
+  - [ ] Write migration tests ~3h
 ```
 
 ### xit
+
 ```
-2366-03-01
-    [ ] Repair warp drive containment field assignee:geordi project:Enterprise context:engineering due:2366-03-15 est:8h
-        [ ] Replace magnetic constrictors est:2h
-        [ ] Recalibrate plasma injectors est:3h
-        [ ] Test at warp 5 est:3h
+2024-03-01
+    [ ] Fix database connection pooling assignee:alice project:Acme context:backend due:2024-03-15 est:8h
+        [ ] Update connection settings est:2h
+        [ ] Add retry logic est:3h
+        [ ] Write migration tests est:3h
 ```
 
 ### TaskMark
-```markdown
-## Engineering Operations +Enterprise #engineering
 
-- [ ] (A) Repair warp drive containment field @geordi +WarpCore #critical due:2366-03-15 ~8h type:urgent
-  - [ ] (B) Replace magnetic constrictors @geordi ~2h
-  - [ ] (B) Recalibrate plasma injectors @barclay ~3h
-  - [x] (C) 2366-03-09 2366-03-10 Test at warp 5 @geordi ~3h
+```markdown
+## Backend Operations +Acme #backend
+
+- [ ] (A) Fix database connection pooling @alice +Database #critical due:2024-03-15 ~8h type:urgent
+  - [ ] (B) Update connection settings @alice ~2h
+  - [ ] (B) Add retry logic @bob ~3h
+  - [x] (C) 2024-03-09 2024-03-10 Write migration tests @alice ~3h
 ```
 
 **After inheritance:**
-- Parent: `+Enterprise/WarpCore`, `#engineering`, `#critical`, `type:urgent`
+
+- Parent: `+Acme/Database`, `#backend`, `#critical`, `type:urgent`
 - Subtasks inherit all parent metadata + section metadata
 
 ---
@@ -156,7 +161,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 |--------|---------|
 | Social media familiarity | `@mention` universally understood as person reference |
 | Clear semantics | Unambiguous: `@` = who, `#` = what/where |
-| Distinct from contexts | Allows both: `@geordi` (who) + `#engineering` (where) |
+| Distinct from contexts | Allows both: `@alice` (who) + `#backend` (where) |
 
 ### Why `+project` (from todo.txt)?
 
@@ -164,7 +169,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 |--------|---------|
 | Established convention | Widely recognized from todo.txt ecosystem |
 | Natural grouping | Plus sign implies addition/aggregation |
-| Hierarchy support | `/` separator for sub-projects: `+Enterprise/WarpCore` |
+| Hierarchy support | `/` separator for sub-projects: `+Acme/Backend` |
 
 ### Why `#tag` for contexts (not `@context`)?
 

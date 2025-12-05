@@ -35,6 +35,7 @@
 | `timezone` | String | OPTIONAL | Default timezone for datetime fields | `America/New_York`, `Europe/Paris`, `UTC` |
 
 **Processing Order:**
+
 1. Parse YAML front matter (if present)
 2. Extract `locale` and `timezone` values
 3. Apply to all subsequent date/time parsing
@@ -231,9 +232,9 @@
 
 | Header Level | Pattern | Example |
 |--------------|---------|---------|
-| Top level | `# TODO` (required) | `# TODO +Enterprise #starfleet` |
-| Section | `## Section Name` | `## Engineering +WarpCore #critical` |
-| Subsection | `### Subsection Name` | `### Dilithium Systems +Maintenance` |
+| Top level | `# TODO` (required) | `# TODO +Acme #work` |
+| Section | `## Section Name` | `## Backend +API #critical` |
+| Subsection | `### Subsection Name` | `### Database +Maintenance` |
 
 **All headers MAY include metadata (projects, tags, key-value pairs).**
 
@@ -248,14 +249,14 @@
 **Example:**
 
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Engineering +Engineering #critical
+## Backend +API #critical
 
-- [ ] Task +WarpCore
+- [ ] Task +Database
 ```
 
-**Task inherits:** `+Enterprise/Engineering/WarpCore`, `#starfleet`, `#critical`
+**Task inherits:** `+Acme/API/Database`, `#work`, `#critical`
 
 ---
 
@@ -355,7 +356,7 @@
 | Multiple priorities | Use first, ignore rest | INFO | `(A) (B)` → `(A)` |
 | Invalid task state | Ignore line | INFO | `- [?] Task` |
 | Empty task | Parse as valid | INFO | `- [ ]` |
-| Leading/trailing spaces | Trim from description | NONE | `  Task  ` → `Task` |
+| Leading/trailing spaces | Trim from description | NONE | `Task` → `Task` |
 | Unclosed quote | Warn at `file:line`, treat as unquoted | WARNING | `desc:"unclosed` |
 | Escaped quote | Remove backslash | NONE | `\"` → `"` |
 | Invalid timezone | Warn at `file:line`, use default | WARNING | `T09:00+99:00` |
@@ -365,7 +366,7 @@
 
 | Context | Rule | Example |
 |---------|------|---------|
-| Task description | Trim leading/trailing | `   Task   ` → `Task` |
+| Task description | Trim leading/trailing | `Task` → `Task` |
 | Between tokens | Collapse to single space | `Task   @user` → `Task @user` |
 | Indentation | Any amount = subtask | Spaces or tabs |
 | Empty lines | Ignored | Not parsed |
@@ -416,22 +417,23 @@
 ### 10.2 Full Featured
 
 ```markdown
-# TODO +Enterprise #starfleet
+# TODO +Acme #work
 
-## Engineering Operations +Engineering #critical
+## Backend Operations +Backend #critical
 
-- [ ] (A) 2366-03-10 Repair warp drive @geordi +WarpCore due:2366-03-15T18:00 ~8h type:urgent ticket:ENG-4739 created:2366-03-01T10:00 started:2366-03-10T09:00
-  - [ ] (B) 2366-03-10 Replace magnetic constrictors @geordi ~2h
-  - [ ] (B) 2366-03-11 Recalibrate plasma injectors @barclay ~3h
-  - [x] (C) 2366-03-09 2366-03-10 Test at warp 5 @geordi ~3h
+- [ ] (A) 2024-03-10 Fix database connection @alice +Database due:2024-03-15T18:00 ~8h type:urgent ticket:ENG-4739 created:2024-03-01T10:00 started:2024-03-10T09:00
+  - [ ] (B) 2024-03-10 Update connection pooling @alice ~2h
+  - [ ] (B) 2024-03-11 Add retry logic @bob ~3h
+  - [x] (C) 2024-03-09 2024-03-10 Write migration @alice ~3h
 
-- [ ] 2366-03-15T09:00 Daily status report @geordi repeat:"weekdays at 9am" due:2366-03-15T09:30 ~30m type:report
+- [ ] 2024-03-15T09:00 Daily status report @alice repeat:"weekdays at 9am" due:2024-03-15T09:30 ~30m type:report
 ```
 
 **After Inheritance:**
-- First task: `+Enterprise/Engineering/WarpCore`, `#starfleet`, `#critical`
+
+- First task: `+Acme/Backend/Database`, `#work`, `#critical`
 - Subtasks: Inherit parent + section + top-level metadata
-- Daily report: `+Enterprise/Engineering`, `#starfleet`, `#critical`
+- Daily report: `+Acme/Backend`, `#work`, `#critical`
 
 ### 10.3 Date and Time Examples
 

@@ -24,18 +24,21 @@
 | Position | MUST appear at file start |
 | Delimiters | MUST be enclosed between `---` lines |
 | Syntax | MUST be valid YAML |
-| Invalid YAML | MUST warn, MUST NOT fail parsing |
+| Invalid YAML | SHOULD warn, MUST NOT fail parsing |
 | Unknown fields | MUST be ignored |
 
 **Supported Fields:**
 
-| Field | Type | Purpose |
-|-------|------|---------|
-| `locale` | String | Locale for dateparser/recurrent (`en_US`, `fr_FR`) |
-| `timezone` | String | Default timezone (`America/New_York`, `UTC`) |
-| `date_format` | String | Output date format (`%Y-%m-%d`, `%d/%m/%Y`) |
+| Field | Type | Constraint | Purpose | Example Values |
+|-------|------|-----------|---------|----------------|
+| `locale` | String | OPTIONAL | Locale for dateparser/recurrent | `en_US`, `fr_FR`, `de_DE` |
+| `timezone` | String | OPTIONAL | Default timezone for datetime fields | `America/New_York`, `Europe/Paris`, `UTC` |
 
-**See [spec/frontmatter.md](spec/frontmatter.md) for detailed field behavior, processing order, and file scope rules.**
+**Processing Order:**
+
+1. Parse YAML front matter (if present)
+2. Extract `locale` and `timezone` values
+3. Apply to all subsequent date/time parsing
 
 ---
 
@@ -418,32 +421,88 @@
 
 ## Backend Operations +Backend #critical
 
-- [ ] (A) 2024-03-10 Fix database connection @alice +Database due:2024-03-15T18:00 ~8h type:urgent
+- [ ] (A) 2024-03-10 Fix database connection @alice +Database due:2024-03-15T18:00 ~8h type:urgent ticket:ENG-4739 created:2024-03-01T10:00 started:2024-03-10T09:00
   - [ ] (B) 2024-03-10 Update connection pooling @alice ~2h
+  - [ ] (B) 2024-03-11 Add retry logic @bob ~3h
   - [x] (C) 2024-03-09 2024-03-10 Write migration @alice ~3h
 
-- [ ] 2024-03-15T09:00 Daily status report @alice repeat:"weekdays at 9am" ~30m
+- [ ] 2024-03-15T09:00 Daily status report @alice repeat:"weekdays at 9am" due:2024-03-15T09:30 ~30m type:report
 ```
 
 **After Inheritance:**
 
 - First task: `+Acme/Backend/Database`, `#work`, `#critical`
 - Subtasks: Inherit parent + section + top-level metadata
+- Daily report: `+Acme/Backend`, `#work`, `#critical`
 
-**See [spec/examples.md](spec/examples.md) for date/time examples, YAML front matter examples, and multi-file examples.**
+### 10.3 Date and Time Examples
+
+```markdown
+# TODO +MyProject
+
+## Date-only
+- [ ] (A) 2024-03-10 Start project planning
+- [x] (B) 2024-03-01 2024-03-05 Complete requirements
+
+## Time-specific
+- [ ] 2024-03-15T09:00 Morning standup due:2024-03-15T09:30
+- [ ] 2024-03-15T14:00 Client presentation due:2024-03-15T15:00
+
+## With timezones
+- [ ] 2024-03-15T09:00-05:00 Team call (EST)
+- [ ] 2024-03-15T15:00+01:00 European meeting
+
+## Full lifecycle
+- [ ] (A) 2024-03-10T09:00 Implement OAuth2 @alice created:2024-03-01T10:00 started:2024-03-10T09:00 due:2024-03-15T18:00
+
+## Recurring
+- [ ] 2024-03-18T09:00 Weekly standup repeat:"every monday at 9am"
+- [ ] 2024-04-01 Monthly review repeat:"first day of month"
+```
+
+**Result:** All tasks inherit `+MyProject` from top-level section.
+
+### 10.4 YAML Front Matter
+
+```markdown
+---
+locale: en_US
+timezone: America/New_York
+---
+
+# TODO
+
+## Meetings
+- [ ] 2024-03-18T09:00 Weekly standup repeat:"every monday at 9am"
+- [ ] 2024-04-01 Monthly review repeat:"first day of month"
+
+## Tasks
+- [ ] (A) 2024-03-10 Start development @alice due:2024-03-15T17:00
+```
+
+**Result:** All datetimes without explicit timezone use `America/New_York` (EST/EDT).
 
 ---
 
 ## 11. Library Stack
 
-| Purpose | Library | Usage |
-|---------|---------|-------|
-| Natural language → datetime | [dateparser](https://dateparser.readthedocs.io/) | Parse "next Friday 3pm" |
-| Natural language → recurrence | [recurrent](https://github.com/kvh/recurrent) | Parse "every Tuesday" into RRULE |
-| Recurrence → dates | [python-dateutil](https://dateutil.readthedocs.io/) | Generate occurrence dates |
-| Datetime wrapper | [pendulum](https://pendulum.eustace.io/) | Timezone-aware operations |
+### 11.1 Required Libraries
 
-**See [spec/libraries.md](spec/libraries.md) for detailed library usage and processing pipeline.**
+| Purpose | Library | Version | Usage |
+|---------|---------|---------|-------|
+| Natural language → datetime | [dateparser](https://dateparser.readthedocs.io/) | Latest | Parse phrases like "next Friday 3pm" |
+| Natural language → recurrence | [recurrent](https://github.com/kvh/recurrent) | Latest | Parse "every Tuesday" into RRULE |
+| Recurrence → dates | [python-dateutil](https://dateutil.readthedocs.io/) | Latest | Generate occurrence dates from RRULE |
+| Datetime wrapper | [pendulum](https://pendulum.eustace.io/) | Latest | Timezone-aware datetime operations |
+
+### 11.2 Processing Pipeline
+
+| Step | Input | Library | Output |
+|------|-------|---------|--------|
+| 1 | Natural language date | dateparser | Datetime object |
+| 2 | Natural language recurrence | recurrent | RRULE string |
+| 3 | RRULE string | python-dateutil | List of datetime objects |
+| 4 | Datetime object | pendulum | Timezone-aware datetime |
 
 ---
 
@@ -493,15 +552,36 @@
 
 ## 14. Format Compatibility
 
-TaskMark supports conversion to/from other task formats:
+### 14.1 todo.txt Conversion
 
-| Format | Full Compatibility | Notes |
-|--------|-------------------|-------|
-| todo.txt | → TaskMark: Yes | Contexts become tags |
-| todo.md | → TaskMark: Yes | Add priority, metadata |
-| xit | → TaskMark: Yes | Date headers become sections |
+| Element | todo.txt | TaskMark | Conversion Rule |
+|---------|----------|---------|----------------|
+| Priority | `(A)` at start | `(A)` after state | Move after `- [ ]` |
+| Contexts | `@context` | `#context` | Replace `@` with `#` |
+| Projects | `+project` | `+project` | No change |
+| Assignees | Not supported | `@user` | Add if needed |
+| Dates | Creation date required | Optional | Remove if unwanted |
+| Sections | Not supported | `## Section` | Group by project |
 
-**See [spec/compatibility.md](spec/compatibility.md) for detailed conversion rules and examples.**
+### 14.2 todo.md Conversion
+
+| Element | todo.md | TaskMark | Conversion Rule |
+|---------|---------|---------|----------------|
+| States | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]`, `[!]` | Add `[!]` if needed |
+| Priority | Not standardized | `(value)` after state | Add if needed |
+| Metadata | Freeform | `key:value` | Standardize format |
+| Recurrence | Not supported | `repeat:PATTERN` | Add if needed |
+| File links | Not supported | `[text](file.md)` | Add if needed |
+
+### 14.3 xit Conversion
+
+| Element | xit | TaskMark | Conversion Rule |
+|---------|-----|---------|----------------|
+| Date headers | `2024-03-15` | `## Section` | Convert to sections |
+| States | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]`, `[!]` | Add `[!]` if needed |
+| Metadata | `key:value` | `key:value` | Extract core fields |
+| Priority | Not supported | `(value)` | Add if needed |
+| Projects | `project:name` | `+name` | Convert syntax |
 
 ---
 

@@ -149,23 +149,6 @@ taskmark-spec/
 
 **Invalid Date Handling:** Warn at `file:line`, ignore field, continue parsing
 
-### YAML Front Matter
-
-**Supported Fields:**
-
-| Field | Purpose | Example |
-|-------|---------|---------|
-| `locale` | Natural language date parsing + default output format | `en_US`, `fr_FR` |
-| `timezone` | Default timezone for dates without explicit timezone | `America/New_York`, `UTC` |
-| `date_format` | Output date format (strftime), overrides locale | `%Y-%m-%d`, `%d/%m/%Y` |
-
-**File Scope Rules:**
-
-- Front matter applies ONLY to the current file
-- Linked files retain their own front matter
-- No inheritance of front matter between files
-- Default: system locale/timezone, ISO 8601 output (`YYYY-MM-DD`)
-
 ### Section Headers and Inheritance
 
 ```markdown

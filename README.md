@@ -5,7 +5,7 @@
 
 **Plain-text todos that work everywhere.** Write tasks in Markdown, track them in git, and never lose your todos again.
 
-**Status:** Draft v1.0.0
+**Status:** Draft v1.1.0
 
 ---
 
@@ -249,7 +249,7 @@ Start with basic checkboxes. Add structure as your project grows. Use metadata i
 
 ## Implementation Status
 
-**Specification:** ✅ Draft v1.0.0 (Complete)
+**Specification:** ✅ Draft v1.1.0 (Complete)
 **Reference Parser:** ⏳ Not yet implemented
 **Editor Support:** ⏳ Not yet implemented
 

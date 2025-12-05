@@ -63,7 +63,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Powerful features (recurrence, subtasks, priorities)
 - Simple by default, scales to complex projects
 
-**Status:** Draft v1.0.0 (specification complete, no parser yet)
+**Status:** Draft v1.1.0 (specification complete, no parser yet)
 
 ### Philosophy
 
@@ -603,7 +603,7 @@ taskmark-spec/
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Specification | ✅ Complete | Draft v1.0.0 |
+| Specification | ✅ Complete | Draft v1.1.0 |
 | Reference Parser | ⏳ Not started | Python implementation planned |
 | VSCode Extension | ⏳ Not started | Syntax highlighting, task detection |
 | CLI Tool | ⏳ Not started | Query, filter, update tasks |

@@ -1,6 +1,6 @@
 # TaskMark Format Specification
 
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Format:** Markdown (.md)
 **Encoding:** UTF-8 (REQUIRED)
 **Line Endings:** LF (`\n`) or CRLF (`\r\n`)
@@ -62,7 +62,7 @@
 | Done date | `YYYY-MM-DD[THH:MM[:SS][±HH:MM]]` | After planned | No | N/A | ISO 8601 datetime |
 | Description | Plain text | After dates/priority/state | Yes | Yes | 1-unlimited chars |
 | Assignee | `@username` | In line | No | No | `a-zA-Z0-9_-` |
-| Project | `+name[/sub]` | In line | No | No | `a-zA-Z0-9_-/` |
+| Project | `+name[/sub]` | In line | No | No | `a-zA-Z0-9_-./` |
 | Tag | `#tag` | In line | No | No | `a-zA-Z0-9_-` |
 | Created date | `created:DATETIME` | In line | No | N/A | ISO 8601 datetime |
 | Started date | `started:DATETIME` | In line | No | N/A | ISO 8601 datetime |
@@ -110,7 +110,7 @@
 | Token Type | Pattern | Valid Characters | Notes |
 |------------|---------|------------------|-------|
 | Assignee | `@NAME` | `a-zA-Z0-9_-` | MUST follow whitespace |
-| Project | `+NAME` or `+NAME/SUB` | `a-zA-Z0-9_-/` | `/` for hierarchy only |
+| Project | `+NAME` or `+NAME/SUB` | `a-zA-Z0-9_-./` | `/` for hierarchy, `.` for versions |
 | Tag | `#NAME` | `a-zA-Z0-9_-` | MUST NOT be section header |
 | Metadata key | `KEY:` | `a-zA-Z0-9_-` | Before colon |
 | Metadata value (unquoted) | `:VALUE` | Any non-whitespace | Until whitespace |
@@ -229,11 +229,11 @@
 
 | Header Level | Pattern | Example |
 |--------------|---------|---------|
-| Top level | `# TODO` (required) | `# TODO +Acme #work` |
-| Section | `## Section Name` | `## Backend +API #critical` |
-| Subsection | `### Subsection Name` | `### Database +Maintenance` |
+| Top level | `# TODO` (required) | `# TODO +Acme #work @team` |
+| Section | `## Section Name` | `## Backend +API #critical @alice` |
+| Subsection | `### Subsection Name` | `### Database +Maintenance @bob` |
 
-**All headers MAY include metadata (projects, tags, key-value pairs).**
+**All headers MAY include metadata (projects, tags, assignees, key-value pairs).**
 
 ### 5.2 Inheritance Rules
 
@@ -241,19 +241,20 @@
 |---------------|----------|---------|
 | Projects (`+`) | Hierarchical (join with `/`) | `+A` + `+B` = `+A/B` |
 | Tags (`#`) | Additive | `#api` + `#urgent` = both tags |
+| Assignees (`@`) | Additive | `@alice` + `@bob` = both assignees |
 | Key-value | Override | `type:bug` overrides `type:feature` |
 
 **Example:**
 
 ```markdown
-# TODO +Acme #work
+# TODO +Acme #work @team
 
-## Backend +API #critical
+## Backend +API #critical @alice
 
-- [ ] Task +Database
+- [ ] Task +Database @bob
 ```
 
-**Task inherits:** `+Acme/API/Database`, `#work`, `#critical`
+**Task inherits:** `+Acme/API/Database`, `#work`, `#critical`, `@team`, `@alice`, `@bob`
 
 ---
 
@@ -268,6 +269,7 @@
 | States | Independent of parent | Can differ from parent state |
 | Projects | Hierarchical join | Parent `+A`, subtask `+B` → `+A/B` |
 | Tags | Additive | Parent `#api`, subtask `#urgent` → both |
+| Assignees | Additive | Parent `@alice`, subtask `@bob` → both |
 | Key-value | Override | Child overrides parent |
 
 **Invalid Nesting:**
@@ -312,13 +314,13 @@
 **Example:**
 
 ```markdown
-## Engineering +Enterprise #engineering type:maintenance
+## Engineering +Enterprise #engineering @geordi type:maintenance
 
 [Warp Core](team/warp.md)
 [Transporters](team/transport.md)
 ```
 
-**Result:** All tasks from both files inherit: `+Enterprise`, `#engineering`, `type:maintenance`
+**Result:** All tasks from both files inherit: `+Enterprise`, `#engineering`, `@geordi`, `type:maintenance`
 
 ---
 
@@ -393,7 +395,7 @@
 | Type | Examples |
 |------|----------|
 | Assignees | `@user1 @user2` |
-| Projects | `+proj1 +proj2/sub` |
+| Projects | `+proj1 +proj2/sub +app/v1.2.3` |
 | Tags | `#tag1 #tag2` |
 | Dates | `created:`, `started:`, `paused:`, `due:` |
 | Recurrence | `repeat:PATTERN` or `repeat:"natural language"` |

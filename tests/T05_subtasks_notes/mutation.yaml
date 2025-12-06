@@ -1,0 +1,27 @@
+# Test subtask mutations - independent of parent
+# Includes multi-level subtask mutation
+mutations:
+  - target:
+      title: "In progress subtask"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  - target:
+      title: "Parent task"
+    changes:
+      state: in_progress
+    expected_result:
+      status: success
+
+  # Mutate a level 2 subtask (subtask of subtask)
+  - target:
+      title: "Level 2 subtask"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+options:
+  today: "2024-03-15"

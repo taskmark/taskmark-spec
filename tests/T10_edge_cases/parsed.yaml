@@ -1,0 +1,174 @@
+# Edge case tests:
+# - Whitespace normalization
+# - Empty/minimal tasks
+# - Malformed lines preserved as-is
+# - Duplicate metadata handling
+# - Deep nesting
+# - Long content
+# - Mixed indentation
+
+tasks:
+  # Whitespace handling section
+  - title: "Extra spaces in title"
+    state: open
+    file: input.md
+    line: 4
+    indent: 0
+    # Trailing/leading whitespace in title trimmed
+
+  - title: "Tab in title"
+    state: open
+    file: input.md
+    line: 5
+    indent: 0
+
+  - title: "Normal task"
+    state: open
+    file: input.md
+    line: 6
+    indent: 0
+
+  # Empty/minimal - empty title task may be skipped or error
+  # Implementations may vary on whether "- [ ] " with no title is valid
+  - title: "A"
+    state: open
+    file: input.md
+    line: 10
+    indent: 0
+
+  - title: "1"
+    state: open
+    file: input.md
+    line: 11
+    indent: 0
+
+  # Malformed lines - NOT parsed as tasks, preserved as plain text
+  # "- [] Missing space" - not a valid checkbox
+  # "- [y] Invalid" - 'y' is not a valid state
+  # "[  ]" - double space not valid
+  # Orphan subtask with no parent - treated as top-level or error
+
+  - title: "Orphan subtask (no parent task)"
+    state: open
+    file: input.md
+    line: 18
+    indent: 2
+    # Note: orphan subtask becomes top-level task
+
+  # Duplicate metadata - last wins for single-value, merged for multi-value
+  - title: "Task"
+    state: open
+    project_path: Project2
+    explicit_project: Project2
+    due_date: '2024-03-15'
+    file: input.md
+    line: 20
+    indent: 0
+    # Note: +Project2 overrides +Project1, due:2024-03-15 overrides earlier
+
+  - title: "Task"
+    state: open
+    assignees:
+      - alice
+      - bob
+    tags:
+      - tag
+    explicit_assignees:
+      - alice
+      - bob
+    explicit_tags:
+      - tag
+    file: input.md
+    line: 21
+    indent: 0
+    # Note: duplicate @alice deduplicated, duplicate #tag deduplicated
+
+  # Deep nesting
+  - title: "Level 1"
+    state: open
+    file: input.md
+    line: 24
+    indent: 0
+    subtasks:
+      - title: "Level 2"
+        state: open
+        file: input.md
+        line: 25
+        indent: 2
+        subtasks:
+          - title: "Level 3"
+            state: open
+            file: input.md
+            line: 26
+            indent: 4
+            subtasks:
+              - title: "Level 4"
+                state: open
+                file: input.md
+                line: 27
+                indent: 6
+                subtasks:
+                  - title: "Level 5"
+                    state: open
+                    file: input.md
+                    line: 28
+                    indent: 8
+
+  # Long content
+  - title: "This is a very long task title that goes on and on and on and contains lots of words to test how the parser handles extremely long lines that might wrap in editors or cause buffer issues in naive implementations"
+    state: open
+    file: input.md
+    line: 31
+    indent: 0
+
+  # Mixed indentation - treated as flattened or normalized
+  - title: "Parent with spaces"
+    state: open
+    file: input.md
+    line: 34
+    indent: 0
+    subtasks:
+      - title: "Child with tab"
+        state: open
+        file: input.md
+        line: 35
+        indent: 1
+        # Tab = 1 indent level
+
+      - title: "Child with 2 spaces"
+        state: open
+        file: input.md
+        line: 36
+        indent: 2
+
+      - title: "Child with 4 spaces"
+        state: open
+        file: input.md
+        line: 37
+        indent: 4
+
+  # Ambiguous target - two tasks with same title (for error testing)
+  - title: "Duplicate title task"
+    state: open
+    file: input.md
+    line: 41
+    indent: 0
+
+  - title: "Duplicate title task"
+    state: open
+    file: input.md
+    line: 42
+    indent: 0
+
+malformed_lines:
+  - line: 14
+    content: "- [] Missing space after bracket"
+    reason: "No space after opening bracket"
+
+  - line: 15
+    content: "- [y] Invalid state character"
+    reason: "Invalid state character 'y'"
+
+  - line: 16
+    content: "- [  ] Double space in checkbox"
+    reason: "Double space in checkbox"

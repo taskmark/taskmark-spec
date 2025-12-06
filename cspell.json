@@ -7,15 +7,13 @@
     "subtasks",
     "assignee",
     "assignees",
-    "subheadings",
     "YYYY",
     "DDTHH",
     "backlog",
     "todos",
-    "unchecked",
-    "datetimes",
     "parseable",
-    "parseability",
+    "unparseable",
+    "reserialize",
     "AISD",
     "RRULE",
     "DTSTART",
@@ -23,6 +21,9 @@
     "dateutil",
     "rrule",
     "dateparser",
+    "chrono",
+    "luxon",
+    "teambition",
     "todotxt",
     "todomd",
     "jotaen",
@@ -34,7 +35,8 @@
   "ignorePaths": [
     ".git/**",
     "node_modules/**",
-    ".github/**"
+    ".github/**",
+    "tests/**"
   ],
   "ignoreRegExpList": [
     "\\(#\\d+\\)",

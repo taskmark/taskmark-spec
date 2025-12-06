@@ -6,7 +6,8 @@
       {
         "preset": "conventionalcommits",
         "releaseRules": [
-          { "type": "docs", "release": "minor" },
+          { "type": "docs", "scope": "spec", "release": "minor" },
+          { "type": "docs", "release": false },
           { "type": "fix", "release": "patch" },
           { "type": "refactor", "release": "patch" },
           { "type": "style", "release": "patch" },
@@ -25,13 +26,13 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i 's/\\*\\*Version:\\*\\* [0-9]*\\.[0-9]*\\.[0-9]*/\\*\\*Version:\\*\\* ${nextRelease.version}/' docs/specification.md && sed -i 's/Draft v[0-9]*\\.[0-9]*\\.[0-9]*/Draft v${nextRelease.version}/g' README.md AGENTS.md"
+        "prepareCmd": "sed -i 's/\\*\\*Version:\\*\\* [0-9]*\\.[0-9]*\\.[0-9]*/\\*\\*Version:\\*\\* ${nextRelease.version}/' spec/specification.md && sed -i 's/Draft v[0-9]*\\.[0-9]*\\.[0-9]*/Draft v${nextRelease.version}/g' README.md AGENTS.md"
       }
     ],
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md", "docs/specification.md", "README.md", "AGENTS.md"],
+        "assets": ["CHANGELOG.md", "spec/specification.md", "README.md", "AGENTS.md"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],

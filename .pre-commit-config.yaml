@@ -17,12 +17,14 @@ repos:
     hooks:
       - id: markdownlint
         args: ["--fix"]
+        exclude: ^tests/
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v8.6.0
     hooks:
       - id: cspell
         args: ["--no-progress", "--no-summary"]
+        exclude: ^tests/
 
   # Conventional commits for semver
   - repo: https://github.com/compilerla/conventional-pre-commit
@@ -39,10 +41,10 @@ repos:
         entry: bash -c 'if grep -rn -E "\b(should|might|could|typically|usually|often)\b" "$@" 2>/dev/null; then echo "❌ Found forbidden words. Use MUST/REQUIRED/FORBIDDEN instead."; exit 1; fi' --
         language: system
         files: \.(md)$
-        exclude: ^(README\.md|CHANGELOG\.md|AGENTS\.md)$
+        exclude: ^(README\.md|CHANGELOG\.md|AGENTS\.md|tests/)
 
       - id: aisd-line-count
         name: AISD line count check (max 600)
         entry: bash -c 'for file in "$@"; do lines=$(wc -l < "$file"); if [ $lines -gt 600 ]; then echo "❌ $file has $lines lines (max 600). Consider splitting."; exit 1; fi; done' --
         language: system
-        files: ^docs/.*\.md$
+        files: ^(docs|spec)/.*\.md$

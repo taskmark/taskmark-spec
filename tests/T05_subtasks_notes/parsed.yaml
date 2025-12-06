@@ -1,0 +1,111 @@
+# Subtasks and notes:
+# - Subtask @assignee and #tag propagate to parent
+# - [invalid] state treated as note
+# - #repeat tag preserved for recurrence
+# - Notes are plain text (not parsed for metadata)
+
+tasks:
+  - title: Parent task
+    state: open
+    assignees:
+      - alice
+      - bob
+    tags:
+      - urgent
+    estimate_minutes: 480
+    due_date: '2024-03-20'
+    explicit_assignees:
+      - alice
+    file: input.md
+    line: 3
+    indent: 0
+    subtasks:
+      - title: High priority subtask
+        state: open
+        priority: A
+        assignees:
+          - bob
+        tags:
+          - urgent
+        explicit_assignees:
+          - bob
+        explicit_tags:
+          - urgent
+        file: input.md
+        line: 4
+        indent: 2
+
+      - title: In progress subtask
+        state: in_progress
+        started_date: '2024-03-10'
+        file: input.md
+        line: 5
+        indent: 2
+
+      - title: Done subtask
+        state: done
+        done_date: '2024-03-08'
+        file: input.md
+        line: 6
+        indent: 2
+
+      - title: Regular subtask
+        state: open
+        tags:
+          - repeat
+        explicit_tags:
+          - repeat
+        file: input.md
+        line: 7
+        indent: 2
+
+    notes:
+      - text: Note without brackets
+        file: input.md
+        line: 8
+
+      - text: Another note #repeat
+        has_repeat_tag: true
+        file: input.md
+        line: 9
+
+      - text: "[invalid] Treated as note"
+        file: input.md
+        line: 10
+
+  # Multi-level subtasks - subtask of subtask
+  - title: Top level task
+    state: open
+    assignees:
+      - lead
+    tags:
+      - deep
+    file: input.md
+    line: 14
+    indent: 0
+    subtasks:
+      - title: Level 1 subtask
+        state: open
+        assignees:
+          - lead
+        tags:
+          - deep
+        explicit_assignees:
+          - lead
+        file: input.md
+        line: 15
+        indent: 2
+        subtasks:
+          - title: Level 2 subtask
+            state: open
+            tags:
+              - deep
+            explicit_tags:
+              - deep
+            file: input.md
+            line: 16
+            indent: 4
+        notes:
+          - text: Note on level 1
+            file: input.md
+            line: 17

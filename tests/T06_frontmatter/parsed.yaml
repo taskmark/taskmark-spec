@@ -1,0 +1,115 @@
+# Multi-file frontmatter test:
+# - Different locales per file (en_US, en_GB, ja_JP)
+# - Different timezones per file (America/New_York, Europe/London, Asia/Tokyo)
+# - Different date formats (long month, short month, Japanese)
+# - Explicit timezone dates converted to file's timezone
+# - UTC dates (Z suffix) converted to file's timezone
+
+tasks:
+  # Root file (no frontmatter, uses ISO)
+  - title: Global sync meeting
+    state: open
+    planned_date: '2024-03-15T14:00Z'
+    due_date: '2024-03-15T15:00Z'
+    file: input.md
+    line: 13
+    indent: 0
+
+  # US Office (en_US, America/New_York, "%B %d, %Y")
+  - title: Quarterly review
+    state: open
+    planned_date: '2024-03-15'
+    file: us_office.md
+    line: 9
+    indent: 0
+
+  - title: Submit report
+    state: open
+    due_date: '2024-03-20'
+    file: us_office.md
+    line: 10
+    indent: 0
+
+  - title: Call London office
+    state: open
+    planned_date: '2024-03-15T09:00-05:00'
+    # Explicit TZ preserved in parsed, converted on output
+    file: us_office.md
+    line: 11
+    indent: 0
+
+  # UK Office (en_GB, Europe/London, "%d %b %Y")
+  - title: Board meeting
+    state: open
+    planned_date: '2024-03-15'
+    file: uk_office.md
+    line: 9
+    indent: 0
+
+  - title: Financial close
+    state: open
+    due_date: '2024-03-31'
+    file: uk_office.md
+    line: 10
+    indent: 0
+
+  - title: Call Tokyo office
+    state: open
+    planned_date: '2024-03-15T14:00+00:00'
+    file: uk_office.md
+    line: 11
+    indent: 0
+
+  # Japan Office (ja_JP, Asia/Tokyo, "%Y年%m月%d日")
+  - title: Sprint planning
+    state: open
+    planned_date: '2024-03-15'
+    file: japan_office.md
+    line: 9
+    indent: 0
+
+  - title: Release deadline
+    state: open
+    due_date: '2024-03-31'
+    file: japan_office.md
+    line: 10
+    indent: 0
+
+  - title: Call New York
+    state: open
+    planned_date: '2024-03-15T23:00+09:00'
+    file: japan_office.md
+    line: 11
+    indent: 0
+
+file_links:
+  - source: input.md
+    target: us_office.md
+    section: "US Office (New York)"
+    line: 4
+
+  - source: input.md
+    target: uk_office.md
+    section: "UK Office (London)"
+    line: 7
+
+  - source: input.md
+    target: japan_office.md
+    section: "Japan Office (Tokyo)"
+    line: 10
+
+frontmatter:
+  us_office.md:
+    locale: en_US
+    timezone: America/New_York
+    date_format: "%B %d, %Y"
+
+  uk_office.md:
+    locale: en_GB
+    timezone: Europe/London
+    date_format: "%d %b %Y"
+
+  japan_office.md:
+    locale: ja_JP
+    timezone: Asia/Tokyo
+    date_format: "%Y年%m月%d日"

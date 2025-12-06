@@ -1,0 +1,58 @@
+# Test state transitions and auto-date setting
+# Includes reopen transitions: done→open, in_progress→open, blocked→open
+mutations:
+  - target:
+      title: "Open task"
+    changes:
+      state: in_progress
+    expected_result:
+      status: success
+
+  - target:
+      title: "In progress task"
+    changes:
+      state: blocked
+    expected_result:
+      status: success
+
+  - target:
+      title: "Blocked task"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  - target:
+      title: "Cancelled task"
+    changes:
+      state: open
+    expected_result:
+      status: success
+
+  # Reopen transitions - these clear the associated date fields
+  - target:
+      title: "Reopen done task"
+    changes:
+      state: open
+    expected_result:
+      status: success
+      # done: should be cleared
+
+  - target:
+      title: "Reopen in progress task"
+    changes:
+      state: open
+    expected_result:
+      status: success
+      # started: should be cleared
+
+  - target:
+      title: "Reopen blocked task"
+    changes:
+      state: open
+    expected_result:
+      status: success
+      # paused: should be cleared
+
+options:
+  today: "2024-03-15"

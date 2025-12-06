@@ -1,0 +1,101 @@
+# Team standup example - tests section inheritance, subtasks, all states
+
+tasks:
+  # Backend section
+  - title: API rate limiting
+    state: done
+    estimate: 4h
+    tags: [security]
+    planned: "2024-11-01"
+    done: "2024-11-02"
+    projects: [work]
+    assignees: [backend-team]
+    section: "Backend"
+    file: input.md
+    line: 5
+    indent: 0
+
+  - title: Database migration blocked by ops
+    state: blocked
+    estimate: 8h
+    assignees: [backend-team, alice]
+    due: "2024-11-15"
+    projects: [work]
+    section: "Backend"
+    file: input.md
+    line: 6
+    indent: 0
+    subtasks:
+      - title: Write migration script
+        state: open
+        estimate: 2h
+        indent: 2
+
+      - title: Test on staging
+        state: open
+        estimate: 3h
+        indent: 2
+
+  # Frontend section
+  - title: User dashboard redesign
+    state: open
+    priority: B
+    estimate: 16h
+    tags: [ux]
+    projects: [work]
+    assignees: [frontend-team, designer, bob]
+    section: "Frontend"
+    file: input.md
+    line: 12
+    indent: 0
+    subtasks:
+      - title: Mockups approved
+        state: done
+        estimate: 4h
+        assignees: [designer]
+        indent: 2
+
+      - title: Component implementation
+        state: open
+        estimate: 8h
+        assignees: [bob]
+        indent: 2
+
+      - title: Integration testing
+        state: open
+        estimate: 4h
+        indent: 2
+
+  - title: Legacy widget removal
+    state: cancelled
+    projects: [work]
+    assignees: [frontend-team]
+    section: "Frontend"
+    file: input.md
+    line: 16
+    indent: 0
+
+  # DevOps section
+  - title: CI/CD pipeline optimization
+    state: open
+    priority: A
+    estimate: 6h
+    tags: [infra]
+    projects: [work]
+    assignees: [ops]
+    section: "DevOps"
+    file: input.md
+    line: 20
+    indent: 0
+
+  - title: SSL certificate renewal
+    state: done
+    estimate: 1h
+    planned: "2024-10-28"
+    done: "2024-10-30"
+    projects: [work]
+    assignees: [ops]
+    section: "DevOps"
+    file: input.md
+    line: 21
+    indent: 0

@@ -1,0 +1,22 @@
+# Test that explicit metadata can be changed but inherited cannot be removed
+mutations:
+  - target:
+      title: "Task with explicit"
+    changes:
+      tags:
+        - critical
+        - mytag
+        - newtag
+        - work
+    expected_result:
+      status: success
+
+  - target:
+      title: "Frontend task"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+options:
+  today: "2024-03-15"

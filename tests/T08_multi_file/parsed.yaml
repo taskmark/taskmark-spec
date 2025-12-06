@@ -1,0 +1,137 @@
+# Multi-file tests:
+# - File links with [[filename.md]] syntax
+# - Inheritance flows from parent to linked files
+# - Linked files can have own frontmatter
+# - Project paths join hierarchically
+
+tasks:
+  # From input.md (root file)
+  - title: Integration testing
+    state: open
+    project_path: MainProject
+    assignees:
+      - lead
+    tags:
+      - dashboard
+    explicit_tags: []
+    inherited_project: MainProject
+    inherited_assignees:
+      - lead
+    inherited_tags:
+      - dashboard
+    planned_date: '2024-03-15'
+    file: input.md
+    line: 9
+    indent: 0
+
+  # From backend.md (inherits from Backend section in parent)
+  - title: Setup database
+    state: open
+    project_path: MainProject/Backend
+    assignees:
+      - lead
+      - alice
+    tags:
+      - dashboard
+    explicit_project: Backend
+    explicit_assignees:
+      - alice
+    explicit_tags: []
+    inherited_project: MainProject
+    inherited_assignees:
+      - lead
+    inherited_tags:
+      - dashboard
+    file: backend.md
+    line: 3
+    indent: 0
+
+  - title: Build API endpoints
+    state: in_progress
+    project_path: MainProject
+    assignees:
+      - lead
+    tags:
+      - dashboard
+    explicit_tags: []
+    inherited_project: MainProject
+    inherited_assignees:
+      - lead
+    inherited_tags:
+      - dashboard
+    started_date: '2024-03-01'
+    file: backend.md
+    line: 4
+    indent: 0
+
+  # From frontend.md (has own frontmatter, inherits from Frontend section)
+  - title: Build login form
+    state: open
+    project_path: MainProject
+    assignees:
+      - lead
+      - bob
+    tags:
+      - dashboard
+      - react
+    explicit_assignees:
+      - bob
+    explicit_tags: []
+    inherited_project: MainProject
+    inherited_assignees:
+      - lead
+    inherited_tags:
+      - dashboard
+      - react
+    planned_date: '2024-03-15'
+    file: frontend.md
+    line: 8
+    indent: 0
+
+  - title: Create dashboard
+    state: open
+    project_path: MainProject/UI
+    assignees:
+      - lead
+    tags:
+      - dashboard
+      - react
+    explicit_project: UI
+    explicit_tags: []
+    inherited_project: MainProject
+    inherited_assignees:
+      - lead
+    inherited_tags:
+      - dashboard
+      - react
+    file: frontend.md
+    line: 9
+    indent: 0
+
+file_links:
+  - source: input.md
+    target: backend.md
+    section: Backend
+    line: 4
+
+  - source: input.md
+    target: frontend.md
+    section: Frontend
+    line: 7
+
+  # Broken link - file does not exist
+  - source: input.md
+    target: nonexistent.md
+    section: "Broken Link (Error Case)"
+    line: 12
+
+frontmatter:
+  frontend.md:
+    locale: en-GB
+    date_format: "%d/%m/%Y"
+
+errors:
+  - file: input.md
+    line: 12
+    code: "E005"
+    message: "Linked file not found: nonexistent.md"

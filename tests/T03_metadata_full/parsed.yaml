@@ -1,0 +1,114 @@
+# All metadata types: priority, project, assignee, tag, estimate, dates, custom fields
+
+tasks:
+  - title: Priority task
+    state: open
+    priority: A
+    project_path: Project
+    assignees:
+      - alice
+      - bob
+    tags:
+      - backend
+      - urgent
+    estimate_minutes: 240
+    due_date: '2024-03-20'
+    explicit_assignees:
+      - alice
+      - bob
+    explicit_tags:
+      - backend
+      - urgent
+    file: input.md
+    line: 3
+    indent: 0
+
+  - title: Numeric priority
+    state: open
+    priority: '1'
+    project_path: Project/Sub
+    estimate_minutes: 30
+    planned_date: '2024-03-10T09:00Z'
+    file: input.md
+    line: 4
+    indent: 0
+
+  - title: All dates
+    state: open
+    created_date: '2024-03-01'
+    planned_date: '2024-03-10'
+    started_date: '2024-03-10'
+    paused_date: '2024-03-11'
+    due_date: '2024-03-15'
+    done_date: '2024-03-12'
+    file: input.md
+    line: 5
+    indent: 0
+
+  - title: Custom fields
+    state: open
+    custom_fields:
+      ticket: ENG-123
+      type: bug
+      url: https://example.com/path
+    file: input.md
+    line: 6
+    indent: 0
+
+  - title: Day estimate
+    state: open
+    estimate_minutes: 2880
+    file: input.md
+    line: 7
+    indent: 0
+
+  - title: Minutes estimate
+    state: open
+    estimate_minutes: 90
+    file: input.md
+    line: 8
+    indent: 0
+
+  # Removal and change test tasks
+  - title: Remove all assignees
+    state: open
+    assignees:
+      - alice
+      - bob
+    tags:
+      - keep
+    explicit_assignees:
+      - alice
+      - bob
+    explicit_tags:
+      - keep
+    file: input.md
+    line: 12
+    indent: 0
+
+  - title: Remove all tags
+    state: open
+    assignees:
+      - keep
+    tags:
+      - tag1
+      - tag2
+    explicit_assignees:
+      - keep
+    explicit_tags:
+      - tag1
+      - tag2
+    file: input.md
+    line: 13
+    indent: 0
+
+  - title: Change project
+    state: open
+    project_path: OldProject
+    assignees:
+      - alice
+    explicit_assignees:
+      - alice
+    file: input.md
+    line: 14
+    indent: 0

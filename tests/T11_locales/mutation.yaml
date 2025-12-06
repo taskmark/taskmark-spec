@@ -1,0 +1,79 @@
+# Test locale-specific date serialization:
+# - Complete one task in each locale
+# - done: dates should be serialized in locale's format
+
+mutations:
+  - target:
+      file: en_us.md
+      title: "March meeting"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "March 15, 2024"
+
+  - target:
+      file: en_gb.md
+      title: "March meeting"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "15 March 2024"
+
+  - target:
+      file: es.md
+      title: "Reunión de marzo"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "15 de marzo de 2024"
+
+  - target:
+      file: de.md
+      title: "März-Besprechung"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "15. März 2024"
+
+  - target:
+      file: pt_br.md
+      title: "Reunião de março"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "15 de março de 2024"
+
+  - target:
+      file: nl.md
+      title: "Maart vergadering"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "15 maart 2024"
+
+  - target:
+      file: ru.md
+      title: "Мартовская встреча"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "15 марта 2024"
+
+  - target:
+      file: zh_cn.md
+      title: "三月会议"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: "2024年03月15日"
+
+options:
+  today: "2024-03-15"

@@ -2,7 +2,7 @@
 
 Documentation for AI agents working on the TaskMark project.
 
-**Version:** 2.0.0
+**Version:** 2.0.1
 
 ---
 
@@ -149,7 +149,7 @@ See [specification.md](spec/specification.md) for complete error handling.
 
 | Component | Status |
 |-----------|--------|
-| Specification | ✅ v2.0.0 |
+| Specification | ✅ v2.0.1 |
 | Reference Parser | ⏳ Not started |
 | VSCode Extension | ⏳ Not started |
 | CLI Tool | ⏳ Not started |

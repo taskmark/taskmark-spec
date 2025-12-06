@@ -7,7 +7,7 @@
 
 Write tasks in Markdown. Track them in git. Never lose your todos again.
 
-**Version:** 2.0.0
+**Version:** 2.0.1
 
 ---
 
@@ -254,7 +254,7 @@ Start with basic checkboxes. Add structure as your project grows. Use metadata i
 
 | Component | Status |
 |-----------|--------|
-| Specification | ✅ v2.0.0 |
+| Specification | ✅ v2.0.1 |
 | Reference Parser | ⏳ Not yet implemented |
 | Editor Support | ⏳ Not yet implemented |
 

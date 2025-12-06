@@ -1,6 +1,6 @@
 # TaskMark Format Specification
 
-**Version:** 2.0.0
+**Version:** 2.0.1
 **Encoding:** UTF-8
 **Extension:** `.md`
 

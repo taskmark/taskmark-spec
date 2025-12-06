@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/taskmark/taskmark-spec/compare/v2.0.0...v2.0.1) (2025-12-06)
+
+
+### Bug Fixes
+
+* **release:** update version sed patterns and bump to v2.0.0 ([676019a](https://github.com/taskmark/taskmark-spec/commit/676019ae5fd95ff7059af7518ac5b591ab4938f7))
+
 # [2.0.0](https://github.com/taskmark/taskmark-spec/compare/v1.2.0...v2.0.0) (2025-12-06)
 
 

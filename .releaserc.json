@@ -6,6 +6,7 @@
       {
         "preset": "conventionalcommits",
         "releaseRules": [
+          { "breaking": true, "release": "major" },
           { "type": "docs", "scope": "spec", "release": "minor" },
           { "type": "docs", "release": false },
           { "type": "fix", "release": "patch" },

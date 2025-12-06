@@ -27,7 +27,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i 's/\\*\\*Version:\\*\\* [0-9]*\\.[0-9]*\\.[0-9]*/\\*\\*Version:\\*\\* ${nextRelease.version}/' spec/specification.md && sed -i 's/Draft v[0-9]*\\.[0-9]*\\.[0-9]*/Draft v${nextRelease.version}/g' README.md AGENTS.md"
+        "prepareCmd": "sed -i 's/\\*\\*Version:\\*\\* [0-9]*\\.[0-9]*\\.[0-9]*/\\*\\*Version:\\*\\* ${nextRelease.version}/g' spec/specification.md README.md AGENTS.md && sed -i 's/✅ v[0-9]*\\.[0-9]*\\.[0-9]*/✅ v${nextRelease.version}/g' README.md AGENTS.md"
       }
     ],
     [

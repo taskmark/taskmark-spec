@@ -1,3 +1,40 @@
+# [2.0.0](https://github.com/taskmark/taskmark-spec/compare/v1.2.0...v2.0.0) (2025-12-06)
+
+
+* docs(spec)!: reorganize repository and simplify date handling ([#6](https://github.com/taskmark/taskmark-spec/issues/6)) ([0f986fe](https://github.com/taskmark/taskmark-spec/commit/0f986fe6f89e55c9c5b7f71cb26cec073be64e7f))
+
+
+### Bug Fixes
+
+* **release:** add breaking change rule to trigger major version ([483fd52](https://github.com/taskmark/taskmark-spec/commit/483fd523db17065791c9ccf5867421ec62b21ad2))
+
+
+### BREAKING CHANGES
+
+* Multiple breaking changes to spec format
+
+Date handling changes:
+- Remove positional dates (bare YYYY-MM-DD after priority)
+- All dates now require key:value syntax (planned:, due:, done:)
+- Rename frontmatter field: date_format → datetime_format
+- Add bracket syntax for optional time: %d/%m/%Y[ %H:%M]
+
+Repository reorganization:
+- Move specification from docs/ to spec/
+- Move implementation docs (compatibility, libraries) to docs/
+- Flatten tests/golden/ to tests/
+- Remove examples/ (converted to golden tests T12-T15)
+
+New content:
+- Add golden test suite T01-T15 with full conformance coverage
+- Add TESTING.md with test harness documentation
+- Add CATALOG.md with detailed coverage matrix
+
+Config updates:
+- Update CI, pre-commit, and release configs for new paths
+- Add docs(spec) scope rule for semantic release
+- Exclude tests/ from linting (intentional edge cases)
+
 # [1.2.0](https://github.com/taskmark/taskmark-spec/compare/v1.1.0...v1.2.0) (2025-12-05)
 
 # [1.1.0](https://github.com/taskmark/taskmark-spec/releases/tag/v1.1.0) (2025-12-05)

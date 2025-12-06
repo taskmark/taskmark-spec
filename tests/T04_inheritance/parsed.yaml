@@ -1,0 +1,78 @@
+# Section hierarchy inheritance:
+# - Projects: hierarchical join (+A + +B = +A/B)
+# - Tags: additive
+# - Assignees: additive
+# - Custom fields: child overrides parent
+
+tasks:
+  - title: Task inherits all
+    state: open
+    project_path: Acme/API/DB
+    tags:
+      - critical
+      - work
+    assignees:
+      - alice
+      - team
+    custom_fields:
+      priority: high
+    inherited_project_path: Acme/API/DB
+    inherited_tags:
+      - critical
+      - work
+    inherited_assignees:
+      - alice
+      - team
+    inherited_custom_fields:
+      priority: high
+    file: input.md
+    line: 7
+    indent: 0
+
+  - title: Task with explicit
+    state: open
+    project_path: Acme/API/DB/Extra
+    tags:
+      - critical
+      - mytag
+      - work
+    assignees:
+      - alice
+      - bob
+      - team
+    custom_fields:
+      priority: override
+    inherited_project_path: Acme/API/DB
+    inherited_tags:
+      - critical
+      - work
+    inherited_assignees:
+      - alice
+      - team
+    inherited_custom_fields:
+      priority: high
+    explicit_tags:
+      - mytag
+    explicit_assignees:
+      - bob
+    explicit_custom_fields:
+      priority: override
+    file: input.md
+    line: 8
+    indent: 0
+
+  - title: Frontend task
+    state: open
+    project_path: Acme/UI
+    tags:
+      - work
+    assignees:
+      - team
+    inherited_project_path: Acme/UI
+    inherited_tags:
+      - work
+    inherited_assignees:
+      - team
+    file: input.md
+    line: 12
+    indent: 0

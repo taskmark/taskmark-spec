@@ -1,0 +1,52 @@
+# Test metadata modifications
+# Includes: change metadata, remove all assignees/tags, change project
+mutations:
+  - target:
+      title: "Priority task"
+    changes:
+      priority: B
+      assignees:
+        - alice
+        - charlie
+      tags:
+        - urgent
+        - critical
+      estimate_minutes: 480
+    expected_result:
+      status: success
+
+  - target:
+      title: "Custom fields"
+    changes:
+      custom_fields:
+        type: feature
+        sprint: "24"
+    expected_result:
+      status: success
+
+  # Remove all assignees (set to empty array)
+  - target:
+      title: "Remove all assignees"
+    changes:
+      assignees: []
+    expected_result:
+      status: success
+
+  # Remove all tags (set to empty array)
+  - target:
+      title: "Remove all tags"
+    changes:
+      tags: []
+    expected_result:
+      status: success
+
+  # Change project
+  - target:
+      title: "Change project"
+    changes:
+      project_path: NewProject
+    expected_result:
+      status: success
+
+options:
+  today: "2024-03-15"

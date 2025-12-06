@@ -1,0 +1,321 @@
+# Multi-locale date parsing test:
+# - Tests parsing dates with locale-specific month names
+# - Languages: English (US/UK), Spanish, German, Portuguese, Dutch, Russian, Chinese
+# - Each file has its own timezone
+# - Tests datetime with explicit TZ converted to file's timezone
+# - All dates normalize to ISO format internally
+
+tasks:
+  # English (US) - en_US, America/New_York
+  - title: March meeting
+    state: open
+    planned_date: '2024-03-15'
+    file: en_us.md
+    line: 10
+    indent: 0
+
+  - title: December deadline
+    state: open
+    due_date: '2024-12-31'
+    file: en_us.md
+    line: 11
+    indent: 0
+
+  - title: Morning standup
+    state: open
+    planned_date: '2024-03-15T09:00-04:00'
+    file: en_us.md
+    line: 12
+    indent: 0
+
+  - title: UTC event
+    state: open
+    planned_date: '2024-03-15T14:00Z'
+    file: en_us.md
+    line: 13
+    indent: 0
+
+  # English (UK) - en_GB, Europe/London
+  - title: March meeting
+    state: open
+    planned_date: '2024-03-15'
+    file: en_gb.md
+    line: 10
+    indent: 0
+
+  - title: December deadline
+    state: open
+    due_date: '2024-12-31'
+    file: en_gb.md
+    line: 11
+    indent: 0
+
+  - title: Afternoon call
+    state: open
+    planned_date: '2024-03-15T14:30+00:00'
+    file: en_gb.md
+    line: 12
+    indent: 0
+
+  - title: NYC event
+    state: open
+    planned_date: '2024-03-15T10:00-04:00'
+    file: en_gb.md
+    line: 13
+    indent: 0
+
+  # Spanish - es_ES, Europe/Madrid
+  - title: Reunión de marzo
+    state: open
+    planned_date: '2024-03-15'
+    file: es.md
+    line: 10
+    indent: 0
+
+  - title: Fecha límite diciembre
+    state: open
+    due_date: '2024-12-31'
+    file: es.md
+    line: 11
+    indent: 0
+
+  - title: Llamada matutina
+    state: open
+    planned_date: '2024-03-15T10:00+01:00'
+    file: es.md
+    line: 12
+    indent: 0
+
+  - title: Evento Londres
+    state: open
+    planned_date: '2024-03-15T09:00+00:00'
+    file: es.md
+    line: 13
+    indent: 0
+
+  # German - de_DE, Europe/Berlin
+  - title: März-Besprechung
+    state: open
+    planned_date: '2024-03-15'
+    file: de.md
+    line: 10
+    indent: 0
+
+  - title: Dezember-Frist
+    state: open
+    due_date: '2024-12-31'
+    file: de.md
+    line: 11
+    indent: 0
+
+  - title: Morgen-Standup
+    state: open
+    planned_date: '2024-03-15T09:30+01:00'
+    file: de.md
+    line: 12
+    indent: 0
+
+  - title: Tokyo-Anruf
+    state: open
+    planned_date: '2024-03-15T18:00+09:00'
+    file: de.md
+    line: 13
+    indent: 0
+
+  # Portuguese (Brazil) - pt_BR, America/Sao_Paulo
+  - title: Reunião de março
+    state: open
+    planned_date: '2024-03-15'
+    file: pt_br.md
+    line: 10
+    indent: 0
+
+  - title: Prazo dezembro
+    state: open
+    due_date: '2024-12-31'
+    file: pt_br.md
+    line: 11
+    indent: 0
+
+  - title: Chamada matinal
+    state: open
+    planned_date: '2024-03-15T08:00-03:00'
+    file: pt_br.md
+    line: 12
+    indent: 0
+
+  - title: Evento Berlin
+    state: open
+    planned_date: '2024-03-15T14:00+01:00'
+    file: pt_br.md
+    line: 13
+    indent: 0
+
+  # Dutch - nl_NL, Europe/Amsterdam
+  - title: Maart vergadering
+    state: open
+    planned_date: '2024-03-15'
+    file: nl.md
+    line: 10
+    indent: 0
+
+  - title: December deadline
+    state: open
+    due_date: '2024-12-31'
+    file: nl.md
+    line: 11
+    indent: 0
+
+  - title: Ochtend standup
+    state: open
+    planned_date: '2024-03-15T09:00+01:00'
+    file: nl.md
+    line: 12
+    indent: 0
+
+  - title: Sydney event
+    state: open
+    planned_date: '2024-03-15T20:00+11:00'
+    file: nl.md
+    line: 13
+    indent: 0
+
+  # Russian - ru_RU, Europe/Moscow
+  - title: Мартовская встреча
+    state: open
+    planned_date: '2024-03-15'
+    file: ru.md
+    line: 10
+    indent: 0
+
+  - title: Декабрьский дедлайн
+    state: open
+    due_date: '2024-12-31'
+    file: ru.md
+    line: 11
+    indent: 0
+
+  - title: Утренний стендап
+    state: open
+    planned_date: '2024-03-15T10:00+03:00'
+    file: ru.md
+    line: 12
+    indent: 0
+
+  - title: Событие в Нью-Йорке
+    state: open
+    planned_date: '2024-03-15T08:00-04:00'
+    file: ru.md
+    line: 13
+    indent: 0
+
+  # Chinese (Simplified) - zh_CN, Asia/Shanghai
+  - title: 三月会议
+    state: open
+    planned_date: '2024-03-15'
+    file: zh_cn.md
+    line: 10
+    indent: 0
+
+  - title: 十二月截止
+    state: open
+    due_date: '2024-12-31'
+    file: zh_cn.md
+    line: 11
+    indent: 0
+
+  - title: 早间站会
+    state: open
+    planned_date: '2024-03-15T09:00+08:00'
+    file: zh_cn.md
+    line: 12
+    indent: 0
+
+  - title: 伦敦活动
+    state: open
+    planned_date: '2024-03-15T10:00+00:00'
+    file: zh_cn.md
+    line: 13
+    indent: 0
+
+file_links:
+  - source: input.md
+    target: en_us.md
+    section: "English (US)"
+    line: 4
+
+  - source: input.md
+    target: en_gb.md
+    section: "English (UK)"
+    line: 7
+
+  - source: input.md
+    target: es.md
+    section: "Spanish"
+    line: 10
+
+  - source: input.md
+    target: de.md
+    section: "German"
+    line: 13
+
+  - source: input.md
+    target: pt_br.md
+    section: "Portuguese (Brazil)"
+    line: 16
+
+  - source: input.md
+    target: nl.md
+    section: "Dutch"
+    line: 19
+
+  - source: input.md
+    target: ru.md
+    section: "Russian"
+    line: 22
+
+  - source: input.md
+    target: zh_cn.md
+    section: "Chinese (Simplified)"
+    line: 25
+
+frontmatter:
+  en_us.md:
+    locale: en_US
+    timezone: America/New_York
+    date_format: "%B %d, %Y[ %H:%M]"
+
+  en_gb.md:
+    locale: en_GB
+    timezone: Europe/London
+    date_format: "%d %B %Y[ %H:%M]"
+
+  es.md:
+    locale: es_ES
+    timezone: Europe/Madrid
+    date_format: "%d de %B de %Y[ %H:%M]"
+
+  de.md:
+    locale: de_DE
+    timezone: Europe/Berlin
+    date_format: "%d. %B %Y[ %H:%M]"
+
+  pt_br.md:
+    locale: pt_BR
+    timezone: America/Sao_Paulo
+    date_format: "%d de %B de %Y[ %H:%M]"
+
+  nl.md:
+    locale: nl_NL
+    timezone: Europe/Amsterdam
+    date_format: "%d %B %Y[ %H:%M]"
+
+  ru.md:
+    locale: ru_RU
+    timezone: Europe/Moscow
+    date_format: "%d %B %Y[ %H:%M]"
+
+  zh_cn.md:
+    locale: zh_CN
+    timezone: Asia/Shanghai
+    date_format: "%Y年%m月%d日[ %H:%M]"

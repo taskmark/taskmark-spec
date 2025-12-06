@@ -1,0 +1,43 @@
+# Test timezone conversion and locale-specific date serialization:
+# - Completing tasks in different timezones
+# - done: dates serialized in file's format/timezone
+# - Explicit TZ dates converted to file's timezone
+
+mutations:
+  - target:
+      file: us_office.md
+      title: "Quarterly review"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: should be "March 15, 2024" in US format
+
+  - target:
+      file: uk_office.md
+      title: "Board meeting"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: should be "15 Mar 2024" in UK format
+
+  - target:
+      file: japan_office.md
+      title: "Sprint planning"
+    changes:
+      state: done
+    expected_result:
+      status: success
+      # done: should be "2024年03月15日" in Japanese format
+
+  - target:
+      title: "Global sync meeting"
+    changes:
+      state: in_progress
+    expected_result:
+      status: success
+      # Root file has no frontmatter, uses ISO format
+
+options:
+  today: "2024-03-15"

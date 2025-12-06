@@ -1,0 +1,84 @@
+# Escape sequence tests:
+# - Backslash escapes: \+ \@ \# \~ \:
+# - Unicode characters preserved
+# - Emoji preserved
+# - HTML entities preserved as-is
+# - Markdown formatting preserved
+
+tasks:
+  - title: "Task with +literal plus"
+    state: open
+    file: input.md
+    line: 3
+    indent: 0
+    # Note: \+ means literal +, not project prefix
+
+  - title: "Task with @literal at sign"
+    state: open
+    file: input.md
+    line: 4
+    indent: 0
+    # Note: \@ means literal @, not assignee prefix
+
+  - title: "Task with #literal hash"
+    state: open
+    file: input.md
+    line: 5
+    indent: 0
+    # Note: \# means literal #, not tag prefix
+
+  - title: "Task with ~literal tilde"
+    state: open
+    file: input.md
+    line: 6
+    indent: 0
+    # Note: \~ means literal ~, not estimate prefix
+
+  - title: "Has real +Project but @escaped at"
+    state: open
+    project_path: Project
+    explicit_project: Project
+    file: input.md
+    line: 7
+    indent: 0
+    # Note: Real project extracted, escaped @ is literal
+
+  - title: "Date with colon and text:with:colons"
+    state: open
+    due_date: '2024-03-15'
+    file: input.md
+    line: 8
+    indent: 0
+    # Note: \: in text preserved as :, not parsed as key:value
+
+  - title: "Unicode café résumé naïve"
+    state: open
+    file: input.md
+    line: 9
+    indent: 0
+
+  - title: "Emoji task 🎯 📝 ✅"
+    state: open
+    file: input.md
+    line: 10
+    indent: 0
+
+  - title: "Special chars: <>&\"'"
+    state: open
+    file: input.md
+    line: 11
+    indent: 0
+
+  - title: "Backticks `code` and ```blocks```"
+    state: open
+    file: input.md
+    line: 12
+    indent: 0
+
+  # Double backslash: \\ becomes literal \, so \\+ becomes \+ (not escaped, just literal backslash-plus)
+  - title: "Double backslash \\+NotProject \\@NotAssignee"
+    state: open
+    file: input.md
+    line: 13
+    indent: 0
+    # Note: \\ is literal backslash, the + and @ are NOT special because they follow the backslash

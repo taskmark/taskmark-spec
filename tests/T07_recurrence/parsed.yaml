@@ -1,0 +1,81 @@
+# Recurrence patterns:
+# - daily, weekly, monthly, yearly
+# - every-N-weeks, every-monday, first-monday-of-month
+# - #repeat tag on subtasks/notes copied to new instance
+
+tasks:
+  - title: Weekly review
+    state: open
+    recurrence: weekly
+    planned_date: '2024-03-10'
+    due_date: '2024-03-12'
+    file: input.md
+    line: 3
+    indent: 0
+    subtasks:
+      - title: Check metrics
+        state: open
+        tags:
+          - repeat
+        explicit_tags:
+          - repeat
+        file: input.md
+        line: 4
+        indent: 2
+
+      - title: One-time setup
+        state: open
+        file: input.md
+        line: 5
+        indent: 2
+
+    notes:
+      - text: Recurring note #repeat
+        has_repeat_tag: true
+        file: input.md
+        line: 6
+
+      - text: One-time note
+        file: input.md
+        line: 7
+
+  - title: Daily standup
+    state: open
+    recurrence: daily
+    planned_date: '2024-03-10'
+    file: input.md
+    line: 9
+    indent: 0
+
+  - title: To cancel
+    state: open
+    recurrence: weekly
+    planned_date: '2024-03-10'
+    file: input.md
+    line: 11
+    indent: 0
+
+  - title: To block
+    state: open
+    recurrence: weekly
+    planned_date: '2024-03-10'
+    file: input.md
+    line: 13
+    indent: 0
+
+  # Additional recurrence patterns
+  - title: Monthly report
+    state: open
+    recurrence: monthly
+    planned_date: '2024-03-15'
+    file: input.md
+    line: 17
+    indent: 0
+
+  - title: Yearly review
+    state: open
+    recurrence: yearly
+    planned_date: '2024-03-20'
+    file: input.md
+    line: 18
+    indent: 0

@@ -1,0 +1,29 @@
+# Test that escaping is preserved through mutation:
+# - Escaped characters remain escaped in output
+# - Unicode preserved
+# - Emoji preserved
+
+mutations:
+  - target:
+      title: "Task with +literal plus"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  - target:
+      title: "Unicode café résumé naïve"
+    changes:
+      state: in_progress
+    expected_result:
+      status: success
+
+  - target:
+      title: "Emoji task 🎯 📝 ✅"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+options:
+  today: "2024-03-10"

@@ -1,0 +1,214 @@
+# Comprehensive example - tests deep nesting, escaping, multiple files, edge cases
+
+tasks:
+  # Project Alpha > Sprint 1 > Backend
+  - title: Design REST API
+    state: in_progress
+    priority: A
+    estimate: 4h
+    assignees: [lead, dev, alice]
+    tags: [architecture]
+    due: "2025-02-01"
+    started: "2025-01-20"
+    projects: [alpha, sprint1, api]
+    custom:
+      status: active
+    section: "Backend"
+    file: input.md
+    line: 7
+    indent: 0
+
+  - title: Implement auth endpoint
+    state: done
+    assignees: [lead, dev, bob]
+    tags: [security]
+    planned: "2025-01-10"
+    done: "2025-01-12"
+    projects: [alpha, sprint1, api]
+    custom:
+      status: active
+    section: "Backend"
+    file: input.md
+    line: 8
+    indent: 0
+
+  - title: Add rate limiting
+    state: open
+    priority: B
+    estimate: 2h
+    tags: [performance]
+    projects: [alpha, sprint1, api]
+    assignees: [lead, dev, alice]
+    custom:
+      status: active
+    section: "Backend"
+    file: input.md
+    line: 9
+    indent: 0
+    subtasks:
+      - title: Research libraries
+        state: open
+        estimate: 30m
+        indent: 2
+
+      - title: Choose implementation
+        state: done
+        assignees: [alice]
+        done: "2025-01-15"
+        indent: 2
+    notes:
+      - text: "Check existing rate limit in nginx"
+        tags: [repeat]
+
+      - text: "Consider Redis for distributed limiting"
+        tags: []
+
+  - title: Database migration blocked
+    state: blocked
+    tags: [urgent]
+    projects: [alpha, sprint1, api]
+    assignees: [lead, dev]
+    custom:
+      status: active
+    section: "Backend"
+    file: input.md
+    line: 14
+    indent: 0
+    notes:
+      - text: "Waiting for DBA approval"
+        tags: []
+
+      - text: "Scheduled for next maintenance window"
+        tags: []
+
+  # Project Alpha > Sprint 1 > Frontend
+  - title: Build dashboard
+    state: open
+    estimate: 8h
+    assignees: [lead, dev, charlie]
+    tags: [feature]
+    projects: [alpha, sprint1, ui]
+    custom:
+      status: active
+      priority: high
+    section: "Frontend"
+    file: input.md
+    line: 20
+    indent: 0
+
+  - title: Old feature cancelled
+    state: cancelled
+    projects: [alpha, sprint1, ui]
+    assignees: [lead, dev]
+    custom:
+      status: active
+    section: "Frontend"
+    file: input.md
+    line: 21
+    indent: 0
+
+  # Project Alpha > Sprint 2 > Mobile
+  - title: iOS app setup
+    state: open
+    estimate: 16h
+    assignees: [lead, dev]
+    repeat: weekly
+    projects: [alpha, sprint2, mobile]
+    custom:
+      status: active
+    section: "Mobile"
+    file: input.md
+    line: 27
+    indent: 0
+
+  - title: Android app
+    state: open
+    estimate: 20h
+    projects: [alpha, sprint2, mobile]
+    assignees: [lead, dev]
+    custom:
+      status: active
+      env: production
+      version: "2.0"
+    section: "Mobile"
+    file: input.md
+    line: 28
+    indent: 0
+
+  # Standalone Section (no project inheritance from above)
+  - title: Task without project inheritance
+    state: open
+    tags: [misc]
+    section: "Standalone Section"
+    file: input.md
+    line: 32
+    indent: 0
+
+  - title: "Task with escaped @mention and #hashtag"
+    state: open
+    section: "Standalone Section"
+    file: input.md
+    line: 33
+    indent: 0
+
+  # Inheritance Override Test section
+  - title: Task overrides all
+    state: open
+    priority: C
+    tags: [explicit]
+    assignees: [explicit-user]
+    projects: [explicit-project]
+    section: "Inheritance Override Test"
+    file: input.md
+    line: 37
+    indent: 0
+
+  - title: Task inherits everything
+    state: open
+    tags: [base]
+    assignees: [base-user]
+    projects: [override]
+    section: "Inheritance Override Test"
+    file: input.md
+    line: 38
+    indent: 0
+
+  # Edge Cases section
+  - title: Very long title that goes on and on and on and on and on and on and on and on and on
+    state: open
+    section: "Edge Cases"
+    file: input.md
+    line: 42
+    indent: 0
+
+  - title: Quick task
+    state: open
+    estimate: 15m
+    section: "Edge Cases"
+    file: input.md
+    line: 43
+    indent: 0
+
+  - title: Multi-day task
+    state: open
+    estimate: 2d
+    section: "Edge Cases"
+    file: input.md
+    line: 44
+    indent: 0
+
+  - title: Multiple assignees
+    state: open
+    assignees: [user1, user2, user3]
+    section: "Edge Cases"
+    file: input.md
+    line: 45
+    indent: 0
+
+  - title: Multiple tags
+    state: open
+    tags: [tag1, tag2, tag3]
+    section: "Edge Cases"
+    file: input.md
+    line: 46
+    indent: 0

@@ -1,0 +1,9 @@
+# Start a task with custom date format - tests datetime_format serialization
+target:
+  title: "Database schema design"
+changes:
+  state: in_progress
+expected_result:
+  status: success
+options:
+  today: "2024-03-12"

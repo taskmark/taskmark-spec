@@ -1,0 +1,9 @@
+# Complete an in-progress task - tests state transition with existing started date
+target:
+  title: "Design REST API"
+changes:
+  state: done
+expected_result:
+  status: success
+options:
+  today: "2025-01-25"

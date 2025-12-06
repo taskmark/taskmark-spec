@@ -1,0 +1,39 @@
+# Test mutations on edge cases:
+# - Deep nesting state change
+# - Long content preservation
+# - Invalid mutation targets (not found, ambiguous)
+
+mutations:
+  - target:
+      title: "Level 3"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  - target:
+      title: "This is a very long task title that goes on and on and on and contains lots of words to test how the parser handles extremely long lines that might wrap in editors or cause buffer issues in naive implementations"
+    changes:
+      state: in_progress
+    expected_result:
+      status: success
+
+  - target:
+      title: "Nonexistent task"
+    changes:
+      state: done
+    expected_result:
+      status: error
+      error: "Task not found"
+
+  # Ambiguous target - two tasks have same title, mutation should error
+  - target:
+      title: "Duplicate title task"
+    changes:
+      state: done
+    expected_result:
+      status: error
+      error: "Ambiguous target: multiple tasks match"
+
+options:
+  today: "2024-03-10"

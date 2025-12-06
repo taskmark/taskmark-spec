@@ -1,0 +1,131 @@
+# Custom date format example - tests frontmatter with locale, datetime_format, timezone
+
+frontmatter:
+  locale: en_GB
+  datetime_format: "%d/%m/%Y[ %H:%M]"
+  timezone: Europe/London
+
+tasks:
+  # Sprint 1 section
+  - title: Project kickoff meeting
+    state: open
+    priority: A
+    assignees: [team, alice]
+    planned: "2024-03-15"
+    due: "2024-03-15"
+    projects: [uk-project, sprint1]
+    tags: [team]
+    section: "Sprint 1"
+    file: input.md
+    line: 11
+    indent: 0
+
+  - title: Complete requirements document
+    state: done
+    assignees: [team, bob]
+    planned: "2024-03-01"
+    done: "2024-03-05"
+    estimate: 4h
+    projects: [uk-project, sprint1]
+    tags: [team]
+    section: "Sprint 1"
+    file: input.md
+    line: 12
+    indent: 0
+
+  - title: Design system architecture
+    state: open
+    priority: B
+    assignees: [team, charlie, alice]
+    planned: "2024-03-10T09:00"
+    estimate: 8h
+    projects: [uk-project, sprint1]
+    tags: [team]
+    section: "Sprint 1"
+    file: input.md
+    line: 13
+    indent: 0
+    subtasks:
+      - title: Database schema design
+        state: open
+        estimate: 2h
+        indent: 2
+
+      - title: API contract definition
+        state: open
+        estimate: 3h
+        indent: 2
+
+      - title: Infrastructure planning
+        state: done
+        assignees: [alice]
+        planned: "2024-03-08"
+        done: "2024-03-09"
+        estimate: 3h
+        indent: 2
+    notes:
+      - text: "Review with tech lead before finalizing"
+        tags: []
+
+      - text: "Consider scalability requirements"
+        tags: [repeat]
+
+  # Sprint 2 section
+  - title: Implementation phase
+    state: open
+    assignees: [team]
+    planned: "2024-03-18"
+    due: "2024-04-01"
+    projects: [uk-project, sprint2]
+    tags: [team]
+    section: "Sprint 2"
+    file: input.md
+    line: 22
+    indent: 0
+
+  - title: Weekly sync
+    state: open
+    assignees: [team]
+    planned: "2024-03-25T10:00"
+    repeat: weekly
+    estimate: 1h
+    projects: [uk-project, sprint2]
+    tags: [team]
+    section: "Sprint 2"
+    file: input.md
+    line: 23
+    indent: 0
+
+  - title: External API integration blocked
+    state: blocked
+    assignees: [team, bob]
+    planned: "2024-03-20"
+    projects: [uk-project, sprint2]
+    tags: [team]
+    section: "Sprint 2"
+    file: input.md
+    line: 24
+    indent: 0
+
+  # Documentation section
+  - title: Write user guide
+    state: open
+    assignees: [team, charlie]
+    planned: "2024-03-25"
+    estimate: 6h
+    projects: [uk-project, docs]
+    tags: [team]
+    section: "Documentation"
+    file: input.md
+    line: 28
+    indent: 0
+
+  - title: Legacy docs migration cancelled
+    state: cancelled
+    projects: [uk-project, docs]
+    assignees: [team]
+    tags: [team]
+    section: "Documentation"
+    file: input.md
+    line: 29
+    indent: 0

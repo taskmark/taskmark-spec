@@ -19,7 +19,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 
 | Feature | todo.txt | todo.md | xit | .todo | TaskMark |
 |---------|----------|---------|-----|-------|-----------|
-| **Task States** | `x` (done) | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]` | `[ ]`, `[x]`, `[-]`, `[!]` |
+| **Task States** | `x` (done) | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]` | `[ ]`, `[.]`, `[x]`, `[-]`, `[!]` |
 | **Priority** | `(A-Z)` | No standard | No | Variable | `(any)` |
 | **Assignees** | No | `@user` | No | Variable | `@user` |
 | **Projects** | `+project` | No standard | `project:name` | Variable | `+project` with `/` hierarchy |
@@ -30,6 +30,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 | **Subtasks** | No (flat list) | Yes (indented) | Yes (indented) | Yes (indented) | Yes (one level) |
 | **Sections** | No | Yes (headers) | Yes (dates) | Yes (headers) | Yes (headers) |
 | **File Links** | No | No | No | No | `[text](file.md)` (core) |
+| **Notes** | No | No | No | No | Indented `- text` (no brackets) |
 | **Metadata** | `key:value` | Inline text | `key:value` | Separate lines | `key:value` |
 
 ---
@@ -61,10 +62,10 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 | Format | Support | Syntax |
 |--------|---------|--------|
 | **todo.txt** | No | Projects serve as implicit sections |
-| **todo.md** | Yes | `# TODO`, `## Section`, `### Subsection` |
+| **todo.md** | Yes | `# Name`, `## Section`, `### Subsection` |
 | **xit** | Yes | Date headers: `2025-11-19` |
 | **.todo** | Yes | Markdown headers |
-| **TaskMark** | Yes | `# TODO`, `## Section` with metadata inheritance |
+| **TaskMark** | Yes | `# Name`, `## Section` with metadata inheritance |
 
 ---
 
@@ -83,7 +84,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 
 | Aspect | todo.md | TaskMark | Rationale |
 |--------|---------|-----------|-----------|
-| Task states | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]`, `[!]` | Added blocked state |
+| Task states | `[ ]`, `[x]`, `[-]` | `[ ]`, `[.]`, `[x]`, `[-]`, `[!]` | Added in-progress, blocked |
 | Priority | Not standardized | `(value)` after state | Consistent with todo.txt |
 | Metadata | No standard | `key:value` + core fields | Machine-parseable structure |
 | Recurrence | No | `repeat:*` fields | Time-based task automation |
@@ -143,7 +144,9 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 - [ ] (A) Fix database connection pooling @alice +Database #critical due:2024-03-15 ~8h type:urgent
   - [ ] (B) Update connection settings @alice ~2h
   - [ ] (B) Add retry logic @bob ~3h
-  - [x] (C) 2024-03-09 2024-03-10 Write migration tests @alice ~3h
+  - [x] (C) Write migration tests @alice ~3h done:2024-03-10
+  - Check with DBA before deploying #repeat
+  - Production credentials in vault
 ```
 
 **After inheritance:**
@@ -212,13 +215,14 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 | Feature | Source | Improvement |
 |---------|--------|-------------|
 | Plain text simplicity | todo.txt | UTF-8 Markdown for readability |
-| Task states `[x]` | xit, todo.md | Added `[!]` for blocked |
+| Task states `[x]` | xit, todo.md | Added `[.]`, `[!]` |
 | Priority `(A)` | todo.txt | Flexible: letters, numbers, symbols |
 | Assignees `@user` | todo.md | Case-insensitive matching |
 | Projects `+proj` | todo.txt | Hierarchical with `/` |
 | Tags `#tag` | todo.md | Additive inheritance |
 | Sections | todo.md | With metadata inheritance |
 | Subtasks | xit, todo.md | One level, clear rules |
+| Notes | New | Text annotations under tasks |
 | Dates `YYYY-MM-DD` | todo.txt | Core spec, not extension |
 | Recurrence | New | RRULE-inspired, auto-repeat |
 | File links | New | Markdown links with inheritance |
@@ -244,7 +248,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 
 | Element | todo.md | TaskMark | Notes |
 |---------|---------|-----------|-------|
-| Task states | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]`, `[!]` | Add blocked if needed |
+| Task states | `[ ]`, `[x]`, `[-]` | `[ ]`, `[.]`, `[x]`, `[-]`, `[!]` | Add in-progress, blocked |
 | Priority | None | `(value)` after state | Add if needed |
 | Metadata | Freeform | `key:value` | Standardize format |
 | Recurrence | None | `repeat:*` | Add if needed |
@@ -255,7 +259,7 @@ This document compares existing plain-text todo formats that inspired the TaskMa
 | Element | xit | TaskMark | Notes |
 |---------|-----|-----------|-------|
 | Date headers | `2025-11-19` | `## Section` or `due:` | Reorganize by project |
-| Task states | `[ ]`, `[x]`, `[-]` | `[ ]`, `[x]`, `[-]`, `[!]` | Compatible + blocked |
+| Task states | `[ ]`, `[x]`, `[-]` | `[ ]`, `[.]`, `[x]`, `[-]`, `[!]` | Add in-progress, blocked |
 | Metadata | `key:value` | `key:value` + core | Extract core fields |
 | Priority | None | `(value)` | Add if needed |
 | Projects | `project:name` | `+name` | Convert syntax |

@@ -1,0 +1,23 @@
+# Test mutations in linked files:
+# - Can mutate tasks in linked files
+# - Date formatting respects linked file's frontmatter
+
+mutations:
+  - target:
+      file: backend.md
+      title: "Setup database"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  - target:
+      file: frontend.md
+      title: "Build login form"
+    changes:
+      state: in_progress
+    expected_result:
+      status: success
+
+options:
+  today: "2024-03-10"

@@ -1,0 +1,46 @@
+# Test recurrence behavior:
+# - [x] completion: creates new task, removes repeat: from completed
+# - [-] cancel: removes repeat:, no new task
+# - [!] block: keeps repeat:, no new task
+# - monthly: advances by 1 month
+# - yearly: advances by 1 year
+mutations:
+  - target:
+      title: "Weekly review"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  - target:
+      title: "To cancel"
+    changes:
+      state: cancelled
+    expected_result:
+      status: success
+
+  - target:
+      title: "To block"
+    changes:
+      state: blocked
+    expected_result:
+      status: success
+
+  # Monthly recurrence - advances by 1 month
+  - target:
+      title: "Monthly report"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+  # Yearly recurrence - advances by 1 year
+  - target:
+      title: "Yearly review"
+    changes:
+      state: done
+    expected_result:
+      status: success
+
+options:
+  today: "2024-03-10"

@@ -18,12 +18,12 @@ jobs:
       - name: Lint Markdown files
         uses: DavidAnson/markdownlint-cli2-action@v14
         with:
-          globs: "**/*.md"
+          globs: "**/*.md !tests/**/*.md"
 
       - name: Check spelling
         uses: streetsidesoftware/cspell-action@v5
         with:
-          files: "**/*.md"
+          files: "**/*.md !tests/**/*.md"
           config: "./cspell.json"
 
       - name: Check links
@@ -35,10 +35,10 @@ jobs:
       - name: AISD forbidden words check
         run: |
           echo "Checking for forbidden words (should/might/could/typically/usually/often)..."
-          # Exclude README.md, CHANGELOG.md, and AGENTS.md from this check
-          if find . -name "*.md" ! -name "README.md" ! -name "CHANGELOG.md" ! -name "AGENTS.md" -exec grep -l -E "\b(should|might|could|typically|usually|often)\b" {} \; | grep -q .; then
+          # Exclude README.md, CHANGELOG.md, AGENTS.md, and tests/ from this check
+          if find . -name "*.md" ! -path "./tests/*" ! -name "README.md" ! -name "CHANGELOG.md" ! -name "AGENTS.md" -exec grep -l -E "\b(should|might|could|typically|usually|often)\b" {} \; | grep -q .; then
             echo "❌ Found forbidden words in the following files:"
-            find . -name "*.md" ! -name "README.md" ! -name "CHANGELOG.md" ! -name "AGENTS.md" -exec grep -Hn -E "\b(should|might|could|typically|usually|often)\b" {} \;
+            find . -name "*.md" ! -path "./tests/*" ! -name "README.md" ! -name "CHANGELOG.md" ! -name "AGENTS.md" -exec grep -Hn -E "\b(should|might|could|typically|usually|often)\b" {} \;
             echo ""
             echo "Use MUST/REQUIRED/FORBIDDEN instead per AISD style guide."
             exit 1
@@ -47,9 +47,9 @@ jobs:
 
       - name: AISD line count check
         run: |
-          echo "Checking docs/ files for line count (max 600)..."
+          echo "Checking docs/ and spec/ files for line count (max 600)..."
           failed=0
-          for file in docs/*.md docs/**/*.md; do
+          for file in docs/*.md docs/**/*.md spec/*.md; do
             [ -f "$file" ] || continue
             lines=$(wc -l < "$file")
             if [ "$lines" -gt 600 ]; then
@@ -61,7 +61,7 @@ jobs:
             echo "Consider splitting large files."
             exit 1
           fi
-          echo "✅ All docs files within line limit"
+          echo "✅ All docs and spec files within line limit"
 
   commitlint:
     name: Commit Messages
